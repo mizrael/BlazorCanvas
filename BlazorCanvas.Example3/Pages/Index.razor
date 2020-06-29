@@ -67,7 +67,7 @@
     private async ValueTask Render(int width, int height)
     {
         await _context.ClearRectAsync(0, 0, width, height);
-        await _context.DrawImageAsync(_spritesheet, _spritePosition.X, _spritePosition.Y, _sprite.Size.Width,  _sprite.Size.Height);
+        await _context.DrawImageAsync(_sprite.SpriteSheet, _spritePosition.X, _spritePosition.Y, _sprite.Size.Width,  _sprite.Size.Height);
     }
 
 }
