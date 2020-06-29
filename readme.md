@@ -7,6 +7,7 @@ The repository is divided into numbered subfolders, each one with a single examp
 - [Example1](https://github.com/mizrael/BlazorCanvas/tree/master/BlazorCanvas.Example1) shows how to initialize the 2d canvas
 - [Example2](https://github.com/mizrael/BlazorCanvas/tree/master/BlazorCanvas.Example2) shows how to render a sprite and react to the window resize event
 - [Example3](https://github.com/mizrael/BlazorCanvas/tree/master/BlazorCanvas.Example3) shows how to move a sprite on the screen
+- [Example4](https://github.com/mizrael/BlazorCanvas/tree/master/BlazorCanvas.Example4) builds on top of the previous one, refactoring and cleaning up the code
 
 The goal is to create small examples, built one on top of the other, showing how easy it is to render 2d elements using Blazor. Eventually I might end up writing a full game, it highly depends on how much time I'll have.
 
