@@ -4,6 +4,6 @@ namespace BlazorCanvas.Example4.Core
 {
     public class Display
     {
-        public Size Size { get; set; } = new Size(800, 600);
+        public Size Size { get; set; }
     }
 }

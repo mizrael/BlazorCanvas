@@ -20,12 +20,8 @@ namespace BlazorCanvas.Example4
 
         public static async ValueTask<LogoGame> Create(BECanvasComponent canvas, ElementReference spritesheet)
         {
-            var game = new LogoGame();
-
-            game._context = await canvas.CreateCanvas2DAsync();
-
-            game._blazorLogo = new GameObject();
-            game._blazorLogo.Components.Add(new Transform(game._blazorLogo)
+            var blazorLogo = new GameObject();
+            blazorLogo.Components.Add(new Transform(blazorLogo)
             {
                 Position = Vector2.Zero,
                 Direction = Vector2.One
@@ -37,9 +33,11 @@ namespace BlazorCanvas.Example4
                 Size = new Size(200, 200),
                 SpriteSheet = spritesheet
             };
-            game._blazorLogo.Components.Add(new SpriteRenderComponent(sprite, game._blazorLogo));
+            blazorLogo.Components.Add(new SpriteRenderComponent(sprite, blazorLogo));
 
-            game._blazorLogo.Components.Add(new LogoBrain(game._blazorLogo));
+            blazorLogo.Components.Add(new LogoBrain(blazorLogo));
+
+            var game = new LogoGame {_context = await canvas.CreateCanvas2DAsync(), _blazorLogo = blazorLogo};
 
             return game;
         }

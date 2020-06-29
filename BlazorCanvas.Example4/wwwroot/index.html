@@ -31,6 +31,10 @@
             game.instance.invokeMethodAsync('OnResize', game.canvas.width, game.canvas.height);
         }
 
+        window.gameWindowResize = (instance) => {
+            onResize();
+        };
+
         window.initGame = (instance) => {
             var canvasContainer = document.getElementById('canvasContainer'),
                 canvases = canvasContainer.getElementsByTagName('canvas') || [];
@@ -39,9 +43,8 @@
                 canvas: canvases.length ? canvases[0] : null
             };
 
-            onResize();
             window.addEventListener("resize", onResize);
-            
+
             window.requestAnimationFrame(gameLoop);
         };
     </script>
