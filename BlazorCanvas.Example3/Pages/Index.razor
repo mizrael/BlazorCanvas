@@ -1,0 +1,67 @@
+﻿@page "/"
+@using System.Drawing
+@using Blazor.Extensions
+@using Blazor.Extensions.Canvas.Canvas2D
+
+@inject IJSRuntime JsRuntime;
+
+<img @ref="_spritesheet" hidden src="assets/blazor.png" />
+
+<div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
+    <BECanvas @ref="_canvas"></BECanvas>
+</div>
+
+@code
+{
+    BECanvasComponent _canvas;
+
+    const int _spriteWidth = 200;
+    const int _spriteHeight = 200;
+    ElementReference _spritesheet;
+    Point _spritePosition;
+    Point _spriteDirection = new Point(1, 1);
+    float _spriteSpeed = 0.25f;
+
+    float _lastFrameTime = 0f;
+    float _elapsedTime = 0f;
+
+    Canvas2DContext _context;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+            _context = await _canvas.CreateCanvas2DAsync();
+        }
+    }
+
+    [JSInvokable]
+    public async ValueTask GameLoop(float timeStamp, int width, int height)
+    {
+        _elapsedTime = timeStamp - _lastFrameTime;
+        _lastFrameTime = timeStamp;
+
+        await Update(width, height);
+        await Render(width, height);
+    }
+
+    private async ValueTask Update(int width, int height)
+    {
+        if (_spritePosition.X + _spriteWidth >= width || _spritePosition.X < 0)
+            _spriteDirection.X = -_spriteDirection.X;
+
+        if (_spritePosition.Y + _spriteHeight >= height || _spritePosition.Y < 0)
+            _spriteDirection.Y = -_spriteDirection.Y;
+
+        _spritePosition.X += (int)(_spriteDirection.X * _spriteSpeed * _elapsedTime);
+        _spritePosition.Y += (int)(_spriteDirection.Y * _spriteSpeed * _elapsedTime);
+    }
+
+    private async ValueTask Render(int width, int height)
+    {
+        await _context.ClearRectAsync(0, 0, width, height);
+        await _context.DrawImageAsync(_spritesheet, _spritePosition.X, _spritePosition.Y, _spriteWidth, _spriteHeight);
+    }
+
+}
