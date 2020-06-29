@@ -8,7 +8,8 @@ namespace BlazorCanvas.Example5
 {
     public class LogoBrain : BaseComponent
     {
-        private const float Speed = 0.25f;
+        private const float DefaultSpeed = 0.25f;
+        private float _speed = DefaultSpeed;
 
         private readonly SpriteRenderComponent _renderComponent;
         private readonly Transform _transform;
@@ -23,7 +24,13 @@ namespace BlazorCanvas.Example5
         {
             UpdatePosition(game);
 
-            _renderComponent.DrawBoundingBox = _transform.BoundingBox.Contains(InputSystem.Instance.Coords);
+            var isOver = _transform.BoundingBox.Contains(InputSystem.Instance.Coords);
+
+            _renderComponent.DrawBoundingBox = isOver;
+
+            _speed = InputSystem.Instance.GetButtonState(MouseButtons.Left) == ButtonStates.Down && (isOver || _speed == 0f)
+                ? 0
+                : DefaultSpeed;
         }
 
         private void UpdatePosition(GameContext game)
@@ -42,7 +49,7 @@ namespace BlazorCanvas.Example5
 
             transform.Direction = new Vector2(dx, dy);
 
-            transform.Position += transform.Direction * Speed * game.GameTime.ElapsedTime;
+            transform.Position += transform.Direction * _speed * game.GameTime.ElapsedTime;
         }
     }
 }

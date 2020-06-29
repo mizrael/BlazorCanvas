@@ -47,6 +47,12 @@
                 window.game.canvas.onmousemove = (e) => {
                     game.instance.invokeMethodAsync('OnMouseMove', e.clientX, e.clientY);
                 };
+                window.game.canvas.onmousedown = (e) => {
+                    game.instance.invokeMethodAsync('OnMouseDown', e.button);
+                };
+                window.game.canvas.onmouseup = (e) => {
+                    game.instance.invokeMethodAsync('OnMouseUp', e.button);
+                };
             }
 
             window.addEventListener("resize", onResize);

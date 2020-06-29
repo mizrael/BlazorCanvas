@@ -51,4 +51,16 @@
         InputSystem.Instance.Coords.X = mouseX;
         InputSystem.Instance.Coords.Y = mouseY;
     }
+
+    [JSInvokable]
+    public async ValueTask OnMouseDown(MouseButtons button)
+    {
+        InputSystem.Instance.SetButtonState(button, ButtonStates.Down);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnMouseUp(MouseButtons button)
+    {
+        InputSystem.Instance.SetButtonState(button, ButtonStates.Up);
+    }
 }
