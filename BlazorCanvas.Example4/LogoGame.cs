@@ -24,7 +24,7 @@ namespace BlazorCanvas.Example4
             blazorLogo.Components.Add(new Transform(blazorLogo)
             {
                 Position = Vector2.Zero,
-                Direction = Vector2.One
+                Direction = Vector2.One,
             });
 
             var sprite = new Sprite()
