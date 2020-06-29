@@ -1,0 +1,38 @@
+﻿@page "/"
+@using Blazor.Extensions
+@using Blazor.Extensions.Canvas.Canvas2D
+
+@inject IJSRuntime JsRuntime;
+
+<img @ref="_spritesheet" hidden src="assets/blazor.png" />
+
+<div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
+    <BECanvas @ref="_canvas"></BECanvas>
+</div>
+
+@code
+{
+    BECanvasComponent _canvas;
+    ElementReference _spritesheet;
+
+    Canvas2DContext _context;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+            _context = await _canvas.CreateCanvas2DAsync();
+            await _context.SetTextBaselineAsync(TextBaseline.Top);
+        }
+    }
+
+    [JSInvokable]
+    public async ValueTask GameLoop(float timeStamp, int width, int height)
+    {
+        await _context.ClearRectAsync(0, 0, width, height);
+        
+        await _context.DrawImageAsync(_spritesheet, 0, 0, width/2, height/2);
+    }
+
+}

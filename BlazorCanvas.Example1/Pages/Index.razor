@@ -1,0 +1,44 @@
+﻿@page "/"
+@using Blazor.Extensions
+@using Blazor.Extensions.Canvas.Canvas2D
+
+@inject IJSRuntime JsRuntime;
+
+<div id="theCanvas" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
+    <BECanvas Width="300" Height="400" @ref="_canvasReference"></BECanvas>
+</div>
+
+@code
+{
+    BECanvasComponent _canvasReference = null;
+    Canvas2DContext _outputCanvasContext;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _outputCanvasContext = await _canvasReference.CreateCanvas2DAsync();
+            await _outputCanvasContext.SetTextBaselineAsync(TextBaseline.Top);
+        }
+    }
+
+    [JSInvokable]
+    public async ValueTask GameLoop(float timeStamp)
+    {
+        await _outputCanvasContext.ClearRectAsync(0, 0, 300, 400);
+
+        await _outputCanvasContext.SetFillStyleAsync("green");
+        await _outputCanvasContext.FillRectAsync(10, 50, 300, 100);
+
+        await _outputCanvasContext.SetFontAsync("24px verdana");
+        await _outputCanvasContext.StrokeTextAsync($"time: {timeStamp}", 20, 80);
+    }
+
+}
