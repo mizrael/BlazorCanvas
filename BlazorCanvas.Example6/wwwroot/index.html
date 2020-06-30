@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>BlazorCanvas Example 4 - refactored moving sprite</title>
+    <base href="/" />
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+
+<body>
+    <app>Loading...</app>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/Blazor.Extensions.Canvas/blazor.extensions.canvas.js"></script>
+
+    <script>
+        function gameLoop(timeStamp) {
+            window.requestAnimationFrame(gameLoop);
+            game.instance.invokeMethodAsync('GameLoop', timeStamp);
+        }
+
+        function onResize() {
+            if (!window.game.canvas)
+                return;
+
+            game.canvas.width = window.innerWidth;
+            game.canvas.height = window.innerHeight;
+
+            game.instance.invokeMethodAsync('OnResize', game.canvas.width, game.canvas.height);
+        }
+
+        window.gameWindowResize = (instance) => {
+            onResize();
+        };
+
+        window.initGame = (instance) => {
+            var canvasContainer = document.getElementById('canvasContainer'),
+                canvases = canvasContainer.getElementsByTagName('canvas') || [];
+            window.game = {
+                instance: instance,
+                canvas: canvases.length ? canvases[0] : null
+            };
+
+            if (window.game.canvas) {
+                window.game.canvas.onmousemove = (e) => {
+                    game.instance.invokeMethodAsync('OnMouseMove', e.clientX, e.clientY);
+                };
+                window.game.canvas.onmousedown = (e) => {
+                    game.instance.invokeMethodAsync('OnMouseDown', e.button);
+                };
+                window.game.canvas.onmouseup = (e) => {
+                    game.instance.invokeMethodAsync('OnMouseUp', e.button);
+                };
+            }
+
+            window.addEventListener("resize", onResize);
+
+            window.requestAnimationFrame(gameLoop);
+        };
+    </script>
+</body >
+
+</html>

@@ -1,0 +1,69 @@
+﻿@page "/"
+@using System.Drawing
+@using Blazor.Extensions
+@using BlazorCanvas.Example6.Core
+
+@inject IJSRuntime JsRuntime;
+
+<Spritesheet Source = "assets/warrior.json" />
+
+<img @ref="_spritesheet" hidden src="assets/blazor.png" />
+
+<div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
+    <BECanvas @ref="_canvas"></BECanvas>
+</div>
+
+@code
+{
+    BECanvasComponent _canvas;
+    ElementReference _spritesheet;
+
+    GameContext _game;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+
+            _game = await LogoGame.Create(_canvas, _spritesheet);
+
+            // this will make sure that the viewport is correctly initialized
+            await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
+        }
+    }
+
+
+    [JSInvokable]
+    public async ValueTask GameLoop(float timeStamp)
+    {
+        if (null == _game) return;
+        await _game.Step(timeStamp);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnResize(int screenWidth, int screenHeight)
+    {
+        if (null == _game) return;
+        _game.Display.Size = new Size(screenWidth, screenHeight);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnMouseMove(int mouseX, int mouseY)
+    {
+        InputSystem.Instance.Coords.X = mouseX;
+        InputSystem.Instance.Coords.Y = mouseY;
+    }
+
+    [JSInvokable]
+    public async ValueTask OnMouseDown(MouseButtons button)
+    {
+        InputSystem.Instance.SetButtonState(button, ButtonStates.Down);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnMouseUp(MouseButtons button)
+    {
+        InputSystem.Instance.SetButtonState(button, ButtonStates.Up);
+    }
+}
