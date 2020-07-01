@@ -23,16 +23,14 @@ namespace BlazorCanvas.Example6.Core.Components
             if (null == Animation)
                 return;
             
-            var spritesheet = Animation.ImageRef;
-
             if (game.GameTime.TotalTime - _lastUpdate > 1000f / Animation.Fps)
             {
                 ++_currFrameIndex;
                 _lastUpdate = game.GameTime.TotalTime;
-                _currFramePosX = (_currFrameIndex % 5) * 150;
+                _currFramePosX = (_currFrameIndex % Animation.FramesCount) * Animation.FrameSize.Width;
             }
 
-            await context.DrawImageAsync(spritesheet, _currFramePosX, 0,
+            await context.DrawImageAsync(Animation.ImageRef, _currFramePosX, 0,
                 Animation.FrameSize.Width, Animation.FrameSize.Height,
                 _transform.Position.X, _transform.Position.Y,
                 Animation.FrameSize.Width, Animation.FrameSize.Height);

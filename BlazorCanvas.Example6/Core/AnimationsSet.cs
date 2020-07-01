@@ -22,18 +22,23 @@ namespace BlazorCanvas.Example6.Core
 
         public class Animation
         {
-            public Animation(string name, int fps, Size frameSize, ElementReference imageRef, string imageData)
+            public Animation(string name, int fps, int framesCount, Size frameSize, 
+                ElementReference imageRef, string imageData, Size imageSize)
             {
                 Name = name;
                 this.Fps = fps;
                 FrameSize = frameSize;
                 ImageRef = imageRef;
                 ImageData = imageData;
+                FramesCount = framesCount;
+                ImageSize = imageSize;
             }
 
             public string Name { get; }
             public int Fps { get; }
+            public int FramesCount { get; }
             public Size FrameSize { get; }
+            public Size ImageSize { get; }
             public ElementReference ImageRef { get; set; }
             public string ImageData { get; }
         }

@@ -29,7 +29,8 @@
                 var layer = JsonSerializer.Deserialize<PiskelLayer>(jsonLayer);
 
                 if (layer?.chunks?.Length != 0 && !string.IsNullOrWhiteSpace(layer.chunks[0].base64PNG))
-                    _animations.Add(new AnimationsSet.Animation(layer.name, data.piskel.fps, frameSize, new ElementReference(Guid.NewGuid().ToString()), layer.chunks[0].base64PNG));
+                    _animations.Add(new AnimationsSet.Animation(layer.name, data.piskel.fps, 5, frameSize, //TODO: fetch frames count
+                                                             new ElementReference(Guid.NewGuid().ToString()), layer.chunks[0].base64PNG, Size.Empty));
             }
 
             Model = new AnimationsSet(data.piskel.name, _animations);
