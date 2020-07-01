@@ -1,11 +1,11 @@
 using System.Drawing;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Blazor.Extensions;
 using Blazor.Extensions.Canvas.Canvas2D;
 using BlazorCanvas.Example6.Core;
 using BlazorCanvas.Example6.Core.Components;
-using Microsoft.AspNetCore.Components;
 
 namespace BlazorCanvas.Example6
 {
@@ -13,33 +13,26 @@ namespace BlazorCanvas.Example6
     {
         private Canvas2DContext _context;
         private GameObject _blazorLogo;
-        
-        private const int _logoWidth = 200;
-        private const int _logoHeight = 200;
 
         private LogoGame()
         {
         }
 
-        public static async ValueTask<LogoGame> Create(BECanvasComponent canvas, ElementReference spritesheet)
+        public static async ValueTask<LogoGame> Create(BECanvasComponent canvas, AnimationsSet animationsSet)
         {
             var blazorLogo = new GameObject();
+
+            var animation = animationsSet.GetAnimation("Idle");
             blazorLogo.Components.Add(new Transform(blazorLogo)
             {
                 Position = Vector2.Zero,
                 Direction = Vector2.One,
-                Size = new Size(_logoWidth, _logoHeight),
+                Size = animation.FrameSize
             });
 
-            var sprite = new Sprite()
-            {
-                Origin = Point.Empty,
-                Size = new Size(_logoWidth, _logoHeight),
-                SpriteSheet = spritesheet
-            };
-            blazorLogo.Components.Add(new SpriteRenderComponent(sprite, blazorLogo));
+            blazorLogo.Components.Add(new AnimatedSpriteRenderComponent(blazorLogo));
 
-            blazorLogo.Components.Add(new LogoBrain(blazorLogo));
+            blazorLogo.Components.Add(new LogoBrain(animationsSet, blazorLogo));
 
             var game = new LogoGame {_context = await canvas.CreateCanvas2DAsync(), _blazorLogo = blazorLogo};
 
@@ -55,8 +48,8 @@ namespace BlazorCanvas.Example6
         {
             await _context.ClearRectAsync(0, 0, this.Display.Size.Width, this.Display.Size.Height);
 
-            var spriteRenderer = _blazorLogo.Components.Get<SpriteRenderComponent>();
-            await spriteRenderer.Render(_context);
+            var spriteRenderer = _blazorLogo.Components.Get<AnimatedSpriteRenderComponent>();
+            await spriteRenderer.Render(this, _context);
         }
     }
 }

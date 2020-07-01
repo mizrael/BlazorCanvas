@@ -5,9 +5,7 @@
 
 @inject IJSRuntime JsRuntime;
 
-<Spritesheet Source = "assets/warrior.json" />
-
-<img @ref="_spritesheet" hidden src="assets/blazor.png" />
+<Spritesheet @ref="_spritesheet" Source = "assets/warrior.json" OnModelLoaded="@InitGame" />
 
 <div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
     <BECanvas @ref="_canvas"></BECanvas>
@@ -16,21 +14,18 @@
 @code
 {
     BECanvasComponent _canvas;
-    ElementReference _spritesheet;
+    Spritesheet _spritesheet;
 
     GameContext _game;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async Task InitGame(AnimationsSet animationsSet)
     {
-        if (firstRender)
-        {
-            await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+        await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
 
-            _game = await LogoGame.Create(_canvas, _spritesheet);
+        _game = await LogoGame.Create(_canvas, animationsSet);
 
-            // this will make sure that the viewport is correctly initialized
-            await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
-        }
+        // this will make sure that the viewport is correctly initialized
+        await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
     }
 
 
