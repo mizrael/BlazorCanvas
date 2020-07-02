@@ -7,12 +7,12 @@ namespace BlazorCanvas.Example6.Core
 {
     public class AnimationsSet
     {
-        private IDictionary<string, Animation> _animations;
+        private readonly IDictionary<string, Animation> _animations;
 
         public AnimationsSet(string name, IEnumerable<Animation> animations)
         {
-            
             this.Name = name;
+
             _animations = (animations ?? Enumerable.Empty<Animation>()).ToDictionary(a => a.Name);
         }
 

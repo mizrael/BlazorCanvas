@@ -14,7 +14,7 @@
 
     public AnimationsSet Model { get; private set; }
 
-    private IList<AnimationsSet.Animation> _animations = new List<AnimationsSet.Animation>();
+    private readonly IList<AnimationsSet.Animation> _animations = new List<AnimationsSet.Animation>();
 
     protected override async Task OnInitializedAsync()
     {
