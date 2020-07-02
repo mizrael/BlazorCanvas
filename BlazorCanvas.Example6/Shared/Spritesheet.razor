@@ -1,14 +1,14 @@
 ﻿@using System.Drawing
-@using System.Text.Json
 @using BlazorCanvas.Example6.Core
 @inject HttpClient Http
 
 @foreach (var animation in _animations)
 {
-    <img hidden src="@animation.ImageData" @ref="animation.ImageRef" data-name="@animation.Name" />
+    <img hidden src="data:image/png;base64,@animation.ImageData" @ref="animation.ImageRef" data-name="@animation.Name" />
 }
 
 @code{
+
     [Parameter]
     public string Source { get; set; }
 
@@ -18,22 +18,20 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var data = await Http.GetFromJsonAsync<PiskelFile>(this.Source);
+        var data = await Http.GetFromJsonAsync<AnimationsFile>(this.Source);
 
-        if (data?.piskel?.layers != null)
+        if (data?.Animations != null)
         {
-            var frameSize = new Size(data.piskel.height, data.piskel.width);
-
-            foreach (var jsonLayer in data.piskel.layers)
+            foreach (var animationData in data.Animations)
             {
-                var layer = JsonSerializer.Deserialize<PiskelLayer>(jsonLayer);
-
-                if (layer?.chunks?.Length != 0 && !string.IsNullOrWhiteSpace(layer.chunks[0].base64PNG))
-                    _animations.Add(new AnimationsSet.Animation(layer.name, data.piskel.fps, 5, frameSize, //TODO: fetch frames count
-                                                             new ElementReference(Guid.NewGuid().ToString()), layer.chunks[0].base64PNG, Size.Empty));
+                var imageSize = new Size(animationData.imageMeta.width, animationData.imageMeta.height);
+                var elementRef = new ElementReference(Guid.NewGuid().ToString());
+                var animation = new AnimationsSet.Animation(animationData.name, animationData.fps, animationData.frameSize,
+                    elementRef, animationData.imageData, imageSize);
+                _animations.Add(animation);
             }
 
-            Model = new AnimationsSet(data.piskel.name, _animations);
+            Model = new AnimationsSet(data.name, _animations);
 
             await this.OnModelLoaded.InvokeAsync(this.Model);
         }
@@ -42,28 +40,27 @@
     [Parameter]
     public EventCallback<AnimationsSet> OnModelLoaded { get; set; }
 
-    private class PiskelData
-    {
-        public int fps { get; set; }
-        public int height { get; set; }
-        public int width { get; set; }
-        public string name { get; set; }
-        public string[] layers { get; set; }
-    }
-
-    private class PiskelFile
-    {
-        public PiskelData piskel { get; set; }
-    }
-
-    private class PiskelLayer
+    private class AnimationsFile
     {
         public string name { get; set; }
+        public AnimationData[] Animations { get; set; }
 
-        public class Chunk
+        public class AnimationData
         {
-            public string base64PNG { get; set; }
+            public string name { get; set; }
+            public int fps { get; set; }
+            public Size frameSize { get; set; }
+            public ImageMeta imageMeta { get; set; }
+            public string imageData { get; set; }
+
+            public class ImageMeta
+            {
+                public int width { get; set; }
+                public int height { get; set; }
+                public string type { get; set; }
+            }
         }
-        public Chunk[] chunks { get; set; }
     }
+
 }
+  

@@ -1,5 +1,3 @@
-using System.Drawing;
-using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Blazor.Extensions;
@@ -12,7 +10,7 @@ namespace BlazorCanvas.Example6
     public class LogoGame : GameContext
     {
         private Canvas2DContext _context;
-        private GameObject _blazorLogo;
+        private GameObject _warrior;
 
         private LogoGame()
         {
@@ -20,35 +18,39 @@ namespace BlazorCanvas.Example6
 
         public static async ValueTask<LogoGame> Create(BECanvasComponent canvas, AnimationsSet animationsSet)
         {
-            var blazorLogo = new GameObject();
+            var warrior = new GameObject();
 
             var animation = animationsSet.GetAnimation("Idle");
-            blazorLogo.Components.Add(new Transform(blazorLogo)
+
+            warrior.Components.Add(new Transform(warrior)
             {
                 Position = Vector2.Zero,
                 Direction = Vector2.One,
                 Size = animation.FrameSize
             });
 
-            blazorLogo.Components.Add(new AnimatedSpriteRenderComponent(blazorLogo));
+            warrior.Components.Add(new AnimatedSpriteRenderComponent(warrior)
+            {
+                Animation = animation
+            });
 
-            blazorLogo.Components.Add(new LogoBrain(animationsSet, blazorLogo));
+            warrior.Components.Add(new LogoBrain(animationsSet, warrior));
 
-            var game = new LogoGame {_context = await canvas.CreateCanvas2DAsync(), _blazorLogo = blazorLogo};
+            var game = new LogoGame {_context = await canvas.CreateCanvas2DAsync(), _warrior = warrior};
 
             return game;
         }
 
         protected override async ValueTask Update()
         {
-            await _blazorLogo.Update(this);
+            await _warrior.Update(this);
         }
 
         protected override async ValueTask Render()
         {
             await _context.ClearRectAsync(0, 0, this.Display.Size.Width, this.Display.Size.Height);
 
-            var spriteRenderer = _blazorLogo.Components.Get<AnimatedSpriteRenderComponent>();
+            var spriteRenderer = _warrior.Components.Get<AnimatedSpriteRenderComponent>();
             await spriteRenderer.Render(this, _context);
         }
     }
