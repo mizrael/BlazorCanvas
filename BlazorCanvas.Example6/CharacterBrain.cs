@@ -3,9 +3,9 @@ using BlazorCanvas.Example6.Core.Components;
 
 namespace BlazorCanvas.Example6
 {
-    public class LogoBrain : BaseComponent
+    public class CharacterBrain : BaseComponent
     {
-        public LogoBrain(AnimationsSet animationsSet, GameObject owner) : base(owner)
+        public CharacterBrain(AnimationsSet animationsSet, GameObject owner) : base(owner)
         {
         }
     }
