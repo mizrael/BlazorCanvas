@@ -1,0 +1,68 @@
+﻿@page "/"
+@using System.Drawing
+@using Blazor.Extensions
+@using BlazorCanvas.Example8.Core
+
+@inject IJSRuntime JsRuntime;
+
+<Spritesheet @ref="_spritesheet" Source = "assets/warrior.json" OnModelLoaded="@InitGame" />
+
+<div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
+    <BECanvas @ref="_canvas"></BECanvas>
+</div>
+
+@code
+{
+    BECanvasComponent _canvas;
+    Spritesheet _spritesheet;
+
+    GameContext _game;
+
+    protected async Task InitGame(AnimationsSet animationsSet)
+    {
+        await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+
+        _game = await CharacterGame.Create(_canvas, animationsSet);
+
+        // this will make sure that the viewport is correctly initialized
+        await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
+    }
+
+
+    [JSInvokable]
+    public async ValueTask GameLoop(float timeStamp)
+    {
+        if (null == _game) return;
+        await _game.Step(timeStamp);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnResize(int screenWidth, int screenHeight)
+    {
+        if (null == _game) return;
+        _game.Display.Size = new Size(screenWidth, screenHeight);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnMouseMove(int mouseX, int mouseY)
+    {
+        InputSystem.Instance.Coords.X = mouseX;
+        InputSystem.Instance.Coords.Y = mouseY;
+    }
+
+    [JSInvokable]
+    public async ValueTask OnMouseDown(MouseButtons button) =>
+        InputSystem.Instance.SetButtonState(button, ButtonState.States.Down);
+
+    [JSInvokable]
+    public async ValueTask OnMouseUp(MouseButtons button) =>
+        InputSystem.Instance.SetButtonState(button, ButtonState.States.Up);
+
+    [JSInvokable]
+    public async ValueTask OnKeyDown(int keyCode) =>
+        InputSystem.Instance.SetKeyState((Keys)keyCode,ButtonState.States.Down);
+
+    [JSInvokable]
+    public async ValueTask OnKeyUp(int keyCode) =>
+        InputSystem.Instance.SetKeyState((Keys)keyCode,ButtonState.States.Up);
+}

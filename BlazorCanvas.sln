@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorCanvas.Example6", "Bl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorCanvas.Example7", "BlazorCanvas.Example7\BlazorCanvas.Example7.csproj", "{85D00DB7-490E-486A-96E9-870BC6329F7D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorCanvas.Example8", "BlazorCanvas.Example8\BlazorCanvas.Example8.csproj", "{FE2D2F09-EA94-4CD6-A0FA-B1E91C8D1498}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{85D00DB7-490E-486A-96E9-870BC6329F7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85D00DB7-490E-486A-96E9-870BC6329F7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85D00DB7-490E-486A-96E9-870BC6329F7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE2D2F09-EA94-4CD6-A0FA-B1E91C8D1498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE2D2F09-EA94-4CD6-A0FA-B1E91C8D1498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE2D2F09-EA94-4CD6-A0FA-B1E91C8D1498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE2D2F09-EA94-4CD6-A0FA-B1E91C8D1498}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

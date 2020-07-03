@@ -1,0 +1,67 @@
+﻿@using System.Drawing
+@using BlazorCanvas.Example8.Core
+@inject HttpClient Http
+
+@foreach (var animation in _animations)
+{
+    <img hidden src="data:image/png;base64,@animation.ImageData" @ref="animation.ImageRef" data-name="@animation.Name" />
+}
+
+@code{
+
+    [Parameter]
+    public string Source { get; set; }
+
+    public AnimationsSet Model { get; private set; }
+
+    private readonly IList<AnimationsSet.Animation> _animations = new List<AnimationsSet.Animation>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var data = await Http.GetFromJsonAsync<AnimationsFile>(this.Source);
+
+        if (data?.Animations != null)
+        {
+            Model = new AnimationsSet(data.name);
+
+            foreach (var animationData in data.Animations)
+            {
+                var imageSize = new Size(animationData.imageMeta.width, animationData.imageMeta.height);
+                var elementRef = new ElementReference(Guid.NewGuid().ToString());
+                var animation = new AnimationsSet.Animation(animationData.name, animationData.fps, animationData.frameSize, animationData.loop, elementRef, animationData.imageData, imageSize, Model);
+
+                _animations.Add(animation);
+            }
+
+            await this.OnModelLoaded.InvokeAsync(this.Model);
+        }
+    }
+
+    [Parameter]
+    public EventCallback<AnimationsSet> OnModelLoaded { get; set; }
+
+    private class AnimationsFile
+    {
+        public string name { get; set; }
+        public AnimationData[] Animations { get; set; }
+
+        public class AnimationData
+        {
+            public string name { get; set; }
+            public int fps { get; set; }
+            public Size frameSize { get; set; }
+            public ImageMeta imageMeta { get; set; }
+            public string imageData { get; set; }
+            public bool loop { get; set; }
+
+            public class ImageMeta
+            {
+                public int width { get; set; }
+                public int height { get; set; }
+                public string type { get; set; }
+            }
+        }
+    }
+
+}
+  

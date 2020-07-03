@@ -50,7 +50,8 @@ fs.readdir(directoryPath, function (err, files) {
             imageData: buffer.toString('base64'),            
             imageMeta: imageMeta,
             frameSize: frameSize,
-            fps: fps
+            fps: fps,
+            loop: true //TODO: make this configurable
         });        
     });
     
