@@ -51,26 +51,18 @@
     }
 
     [JSInvokable]
-    public async ValueTask OnMouseDown(MouseButtons button)
-    {
-        InputSystem.Instance.SetButtonState(button, ButtonStates.Down);
-    }
+    public async ValueTask OnMouseDown(MouseButtons button) =>
+        InputSystem.Instance.SetButtonState(button, ButtonState.States.Down);
 
     [JSInvokable]
-    public async ValueTask OnMouseUp(MouseButtons button)
-    {
-        InputSystem.Instance.SetButtonState(button, ButtonStates.Up);
-    }
+    public async ValueTask OnMouseUp(MouseButtons button) =>
+        InputSystem.Instance.SetButtonState(button, ButtonState.States.Up);
+    
+    [JSInvokable]
+    public async ValueTask OnKeyDown(int keyCode) =>
+        InputSystem.Instance.SetKeyState((Keys)keyCode,ButtonState.States.Down);
 
     [JSInvokable]
-    public async ValueTask OnKeyDown(int keyCode)
-    {
-        Console.WriteLine($"keydown: {keyCode}");
-    }
-
-    [JSInvokable]
-    public async ValueTask OnKeyUp(int keyCode)
-    {
-        Console.WriteLine($"keyup: {keyCode}");
-    }
+    public async ValueTask OnKeyUp(int keyCode) =>
+        InputSystem.Instance.SetKeyState((Keys)keyCode,ButtonState.States.Up);
 }

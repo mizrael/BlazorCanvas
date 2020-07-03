@@ -34,7 +34,7 @@ namespace BlazorCanvas.Example7
                 Animation = animation
             });
 
-            warrior.Components.Add(new LogoBrain(animationsSet, warrior));
+            warrior.Components.Add(new CharacterBrain(animationsSet, warrior));
 
             var game = new LogoGame {_context = await canvas.CreateCanvas2DAsync(), _warrior = warrior};
 

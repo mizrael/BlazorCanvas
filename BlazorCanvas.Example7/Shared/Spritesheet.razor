@@ -22,16 +22,17 @@
 
         if (data?.Animations != null)
         {
+            Model = new AnimationsSet(data.name);
+
             foreach (var animationData in data.Animations)
             {
                 var imageSize = new Size(animationData.imageMeta.width, animationData.imageMeta.height);
                 var elementRef = new ElementReference(Guid.NewGuid().ToString());
                 var animation = new AnimationsSet.Animation(animationData.name, animationData.fps, animationData.frameSize,
-                    elementRef, animationData.imageData, imageSize);
+                    elementRef, animationData.imageData, imageSize, Model);
+                
                 _animations.Add(animation);
             }
-
-            Model = new AnimationsSet(data.name, _animations);
 
             await this.OnModelLoaded.InvokeAsync(this.Model);
         }

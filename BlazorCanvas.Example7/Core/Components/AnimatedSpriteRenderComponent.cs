@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Blazor.Extensions.Canvas.Canvas2D;
+using BlazorCanvas.Example7.Core.Exceptions;
 
 namespace BlazorCanvas.Example7.Core.Components
 {
@@ -11,11 +12,12 @@ namespace BlazorCanvas.Example7.Core.Components
         private int _currFrameIndex = 0;
         private int _currFramePosX = 0;
         private float _lastUpdate = 0f;
+        private AnimationsSet.Animation _animation;
 
         public AnimatedSpriteRenderComponent(GameObject owner) : base(owner)
         {
             _transform = owner.Components.Get<Transform>() ??
-                         throw new AccessViolationException("Transform component is required");
+                         throw new ComponentNotFoundException<Transform>();
         }
 
         public async ValueTask Render(GameContext game, Canvas2DContext context)
@@ -36,6 +38,16 @@ namespace BlazorCanvas.Example7.Core.Components
                 Animation.FrameSize.Width, Animation.FrameSize.Height);
         }
 
-        public AnimationsSet.Animation Animation { get; set; }
+        public AnimationsSet.Animation Animation
+        {
+            get => _animation;
+            set
+            {
+                if (_animation == value)
+                    return;
+                _currFrameIndex = 0;
+                _animation = value;
+            }
+        }
     }
 }
