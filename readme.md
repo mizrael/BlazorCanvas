@@ -10,6 +10,7 @@ The repository is divided into numbered subfolders, each one with a single examp
 - [Example4](https://github.com/mizrael/BlazorCanvas/tree/master/BlazorCanvas.Example4) builds on top of the previous one, refactoring and cleaning up the code
 - [Example5](https://github.com/mizrael/BlazorCanvas/tree/master/BlazorCanvas.Example5) shows how to handle mouse inputs
 - [Example6](https://github.com/mizrael/BlazorCanvas/tree/master/BlazorCanvas.Example6) shows how to animate a sprite. Spritesheets were downloaded from [here](https://luizmelo.itch.io/medieval-warrior-pack-2) and combined using [a custom tool](https://github.com/mizrael/BlazorCanvas/tree/master/tools/AnimatedSpritesProcessor)
+- [Example7](https://github.com/mizrael/BlazorCanvas/tree/master/BlazorCanvas.Example7) shows how to control animations using the keyboard
 
 The goal is to create small examples, built one on top of the other, showing how easy it is to render 2d elements using Blazor. Eventually I might end up writing a full game, it highly depends on how much time I'll have.
 
