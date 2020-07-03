@@ -32,6 +32,9 @@ namespace BlazorCanvas.Example7.Core.Components
                 _currFramePosX = (_currFrameIndex % Animation.FramesCount) * Animation.FrameSize.Width;
             }
 
+            var dx = -(_transform.Direction.X-1f) * Animation.FrameSize.Width / 2f;
+            await context.SetTransformAsync(_transform.Direction.X, 0, 0, 1, dx, 0);
+
             await context.DrawImageAsync(Animation.ImageRef, _currFramePosX, 0,
                 Animation.FrameSize.Width, Animation.FrameSize.Height,
                 _transform.Position.X, _transform.Position.Y,

@@ -22,7 +22,7 @@
     {
         await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
 
-        _game = await LogoGame.Create(_canvas, animationsSet);
+        _game = await CharacterGame.Create(_canvas, animationsSet);
 
         // this will make sure that the viewport is correctly initialized
         await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
@@ -57,7 +57,7 @@
     [JSInvokable]
     public async ValueTask OnMouseUp(MouseButtons button) =>
         InputSystem.Instance.SetButtonState(button, ButtonState.States.Up);
-    
+
     [JSInvokable]
     public async ValueTask OnKeyDown(int keyCode) =>
         InputSystem.Instance.SetKeyState((Keys)keyCode,ButtonState.States.Down);

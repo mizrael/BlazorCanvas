@@ -18,7 +18,7 @@ namespace BlazorCanvas.Example7.Core.Components
         }
 
         public Vector2 Position { get; set; } = Vector2.Zero;
-        public Vector2 Direction { get; set; } = Vector2.One;
+        public Vector2 Direction { get; set; } = Vector2.UnitX;
         public Size Size { get; set; } = Size.Empty;
 
         private Rectangle _boundingBox;

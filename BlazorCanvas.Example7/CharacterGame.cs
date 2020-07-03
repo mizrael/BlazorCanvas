@@ -7,16 +7,16 @@ using BlazorCanvas.Example7.Core.Components;
 
 namespace BlazorCanvas.Example7
 {
-    public class LogoGame : GameContext
+    public class CharacterGame : GameContext
     {
         private Canvas2DContext _context;
         private GameObject _warrior;
 
-        private LogoGame()
+        private CharacterGame()
         {
         }
 
-        public static async ValueTask<LogoGame> Create(BECanvasComponent canvas, AnimationsSet animationsSet)
+        public static async ValueTask<CharacterGame> Create(BECanvasComponent canvas, AnimationsSet animationsSet)
         {
             var warrior = new GameObject();
 
@@ -36,7 +36,7 @@ namespace BlazorCanvas.Example7
 
             warrior.Components.Add(new CharacterBrain(animationsSet, warrior));
 
-            var game = new LogoGame {_context = await canvas.CreateCanvas2DAsync(), _warrior = warrior};
+            var game = new CharacterGame {_context = await canvas.CreateCanvas2DAsync(), _warrior = warrior};
 
             return game;
         }
