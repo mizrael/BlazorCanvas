@@ -6,7 +6,6 @@ do
     buildPath="build/$filename-t"    
 	dotnet publish --configuration Release $i --output $buildPath
     mv $buildPath/wwwroot/ "build/$filename"    
+    cp "build/$filename/.nojekyll" "build/.nojekyll"       
     rm -rf $buildPath
 done
-
-ls -Ra build/
