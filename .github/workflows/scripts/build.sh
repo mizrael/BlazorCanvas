@@ -8,3 +8,4 @@ do
     mv $buildPath/wwwroot/ "build/$filename"        
     rm -rf $buildPath
 done
+cp readme.md build/readme.md
