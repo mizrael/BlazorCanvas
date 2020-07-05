@@ -14,9 +14,9 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Publish with dotnet
-      run: 
-        - chmod +x .github/workflows/scripts/build.sh
-        - .github/workflows/scripts/build.sh
+      run: |
+        chmod +x .github/workflows/scripts/build.sh
+        .github/workflows/scripts/build.sh
     - name: Deploy to Github Pages
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
