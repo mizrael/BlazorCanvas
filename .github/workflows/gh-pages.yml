@@ -1,0 +1,27 @@
+name: gh-pages
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Publish with dotnet
+      run: 
+        - chmod +x .github/workflows/scripts/build.sh
+        - .github/workflows/scripts/build.sh
+    - name: Deploy to Github Pages
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: development # The branch the action should deploy from.
+        BRANCH: master # The branch the action should deploy to.
+        FOLDER: build # The folder the action should deploy.
+        SINGLE_COMMIT: true
