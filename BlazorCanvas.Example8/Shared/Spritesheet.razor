@@ -1,5 +1,6 @@
 ﻿@using System.Drawing
 @using BlazorCanvas.Example8.Core
+@using BlazorCanvas.Example8.Core.Animations
 @inject HttpClient Http
 
 @foreach (var animation in _animations)
@@ -12,9 +13,9 @@
     [Parameter]
     public string Source { get; set; }
 
-    public AnimationsSet Model { get; private set; }
+    public AnimationCollection Model { get; private set; }
 
-    private readonly IList<AnimationsSet.Animation> _animations = new List<AnimationsSet.Animation>();
+    private readonly IList<AnimationCollection.Animation> _animations = new List<AnimationCollection.Animation>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -22,13 +23,13 @@
 
         if (data?.Animations != null)
         {
-            Model = new AnimationsSet(data.name);
+            Model = new AnimationCollection(data.name);
 
             foreach (var animationData in data.Animations)
             {
                 var imageSize = new Size(animationData.imageMeta.width, animationData.imageMeta.height);
                 var elementRef = new ElementReference(Guid.NewGuid().ToString());
-                var animation = new AnimationsSet.Animation(animationData.name, animationData.fps, animationData.frameSize, animationData.loop, elementRef, animationData.imageData, imageSize, Model);
+                var animation = new AnimationCollection.Animation(animationData.name, animationData.fps, animationData.frameSize, elementRef, animationData.imageData, imageSize, Model);
 
                 _animations.Add(animation);
             }
@@ -38,7 +39,7 @@
     }
 
     [Parameter]
-    public EventCallback<AnimationsSet> OnModelLoaded { get; set; }
+    public EventCallback<AnimationCollection> OnModelLoaded { get; set; }
 
     private class AnimationsFile
     {
@@ -52,7 +53,6 @@
             public Size frameSize { get; set; }
             public ImageMeta imageMeta { get; set; }
             public string imageData { get; set; }
-            public bool loop { get; set; }
 
             public class ImageMeta
             {

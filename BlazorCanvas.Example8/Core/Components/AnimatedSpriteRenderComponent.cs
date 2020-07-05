@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Blazor.Extensions.Canvas.Canvas2D;
+using BlazorCanvas.Example8.Core.Animations;
 using BlazorCanvas.Example8.Core.Exceptions;
 
 namespace BlazorCanvas.Example8.Core.Components
@@ -12,7 +13,7 @@ namespace BlazorCanvas.Example8.Core.Components
         private int _currFramePosX = 0;
         private float _lastUpdate = 0f;
         private bool _completed = false;
-        private AnimationsSet.Animation _animation;
+        private AnimationCollection.Animation _animation;
 
         public AnimatedSpriteRenderComponent(GameObject owner) : base(owner)
         {
@@ -25,17 +26,17 @@ namespace BlazorCanvas.Example8.Core.Components
             if (null == Animation)
                 return;
             
-            if (game.GameTime.TotalTime - _lastUpdate > 1000f / Animation.Fps && (Animation.Loop || !_completed))
+            if (game.GameTime.TotalTime - _lastUpdate > 1000f / Animation.Fps)
             {
-                ++_currFrameIndex;
                 if (_currFrameIndex >= Animation.FramesCount)
                 {
                     _completed = true;
-                    _currFrameIndex = Animation.Loop ? 0 : _currFrameIndex-1;
+                    _currFrameIndex = 0;
                 }
                     
                 _lastUpdate = game.GameTime.TotalTime;
                 _currFramePosX = _currFrameIndex * Animation.FrameSize.Width;
+                ++_currFrameIndex;
             }
 
             var dx = -(_transform.Direction.X-1f) * Animation.FrameSize.Width / 2f;
@@ -47,7 +48,7 @@ namespace BlazorCanvas.Example8.Core.Components
                 Animation.FrameSize.Width, Animation.FrameSize.Height);
         }
 
-        public AnimationsSet.Animation Animation
+        public AnimationCollection.Animation Animation
         {
             get => _animation;
             set

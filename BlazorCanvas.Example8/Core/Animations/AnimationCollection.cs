@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using Microsoft.AspNetCore.Components;
 
-namespace BlazorCanvas.Example8.Core
+namespace BlazorCanvas.Example8.Core.Animations
 {
-    public class AnimationsSet
+    public class AnimationCollection
     {
         private readonly IDictionary<string, Animation> _animations;
 
-        public AnimationsSet(string name)
+        public AnimationCollection(string name)
         {
             this.Name = name;
 
@@ -33,9 +33,8 @@ namespace BlazorCanvas.Example8.Core
         public class Animation
         {
             public Animation(string name, int fps, Size frameSize,
-                bool loop,
                 ElementReference imageRef, string imageData, Size imageSize,
-                AnimationsSet set)
+                AnimationCollection set)
             {
                 Name = name;
                 Fps = fps;
@@ -44,18 +43,16 @@ namespace BlazorCanvas.Example8.Core
                 ImageData = imageData;
                 ImageSize = imageSize;
                 Set = set;
-                Loop = loop;
 
                 this.FramesCount = this.ImageSize.Width / this.FrameSize.Width;
                 set.AddAnimation(this);
             }
-            public AnimationsSet Set { get; }
+            public AnimationCollection Set { get; }
             public string Name { get; }
             public int Fps { get; }
             public int FramesCount { get; }
             public Size FrameSize { get; }
             public Size ImageSize { get; }
-            public bool Loop { get; }
             public ElementReference ImageRef { get; set; }
             public string ImageData { get; }
         }
