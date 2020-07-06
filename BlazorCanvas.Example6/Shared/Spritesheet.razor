@@ -32,11 +32,12 @@
             foreach (var animationData in data.Animations)
             {
                 var imageSize = new Size(animationData.imageMeta.width, animationData.imageMeta.height);
+                var frameSize = animationData.frameSize.ToSize();
                 var elementRef = new ElementReference(Guid.NewGuid().ToString());
 
-                Logger.LogInformation($"loading animation {animationData.name}, frame size: {animationData.frameSize}, image size: {imageSize}");
+                Logger.LogInformation($"loading animation {animationData.name}, frame size: {frameSize}, image size: {imageSize}");
 
-                var animation = new AnimationsSet.Animation(animationData.name, animationData.fps, animationData.frameSize,
+                var animation = new AnimationsSet.Animation(animationData.name, animationData.fps, frameSize,
                     elementRef, animationData.imageData, imageSize);
                 _animations.Add(animation);
             }
@@ -59,7 +60,7 @@
         {
             public string name { get; set; }
             public int fps { get; set; }
-            public Size frameSize { get; set; }
+            public FrameSize frameSize { get; set; }
             public ImageMeta imageMeta { get; set; }
             public string imageData { get; set; }
 
@@ -68,6 +69,13 @@
                 public int width { get; set; }
                 public int height { get; set; }
                 public string type { get; set; }
+            }
+
+            public class FrameSize
+            {
+                public int width { get; set; }
+                public int height { get; set; }
+                public Size ToSize() => new Size(width, height);
             }
         }
     }
