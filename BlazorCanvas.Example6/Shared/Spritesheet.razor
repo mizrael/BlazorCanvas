@@ -26,6 +26,9 @@
             {
                 var imageSize = new Size(animationData.imageMeta.width, animationData.imageMeta.height);
                 var elementRef = new ElementReference(Guid.NewGuid().ToString());
+
+                Console.WriteLine($"loading animation {animationData.name}, frame size: {animationData.frameSize}, image size: {imageSize}");
+
                 var animation = new AnimationsSet.Animation(animationData.name, animationData.fps, animationData.frameSize,
                     elementRef, animationData.imageData, imageSize);
                 _animations.Add(animation);
