@@ -4,7 +4,7 @@ do
     filename=$(basename -- "$i")    
     filename="${filename%.*}"
     buildPath="build/$filename-t"    
-	dotnet publish --configuration Debug $i --output $buildPath
+	dotnet publish --configuration Release $i --output $buildPath
     mv $buildPath/wwwroot/ "build/$filename"        
     rm -rf $buildPath
 
