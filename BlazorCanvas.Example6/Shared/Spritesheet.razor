@@ -51,12 +51,12 @@
     [Parameter]
     public EventCallback<AnimationsSet> OnModelLoaded { get; set; }
 
-    private class AnimationsFile
+    internal class AnimationsFile
     {
         public string name { get; set; }
         public AnimationData[] Animations { get; set; }
 
-        public class AnimationData
+        internal class AnimationData
         {
             public string name { get; set; }
             public int fps { get; set; }
@@ -64,14 +64,14 @@
             public ImageMeta imageMeta { get; set; }
             public string imageData { get; set; }
 
-            public class ImageMeta
+            internal class ImageMeta
             {
                 public int width { get; set; }
                 public int height { get; set; }
                 public string type { get; set; }
             }
 
-            public class FrameSize
+            internal class FrameSize
             {
                 public int width { get; set; }
                 public int height { get; set; }
