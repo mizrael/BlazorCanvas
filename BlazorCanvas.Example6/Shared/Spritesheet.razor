@@ -1,6 +1,9 @@
 ﻿@using System.Drawing
+@using System.Text.Json
 @using BlazorCanvas.Example6.Core
+@using Microsoft.Extensions.Logging
 @inject HttpClient Http
+@inject ILogger<Spritesheet> Logger;
 
 @foreach (var animation in _animations)
 {
@@ -18,7 +21,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var data = await Http.GetFromJsonAsync<AnimationsFile>(this.Source);
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+        var data = await Http.GetFromJsonAsync<AnimationsFile>(this.Source, options);
 
         if (data?.Animations != null)
         {
@@ -27,7 +34,7 @@
                 var imageSize = new Size(animationData.imageMeta.width, animationData.imageMeta.height);
                 var elementRef = new ElementReference(Guid.NewGuid().ToString());
 
-                Console.WriteLine($"loading animation {animationData.name}, frame size: {animationData.frameSize}, image size: {imageSize}");
+                Logger.LogInformation($"loading animation {animationData.name}, frame size: {animationData.frameSize}, image size: {imageSize}");
 
                 var animation = new AnimationsSet.Animation(animationData.name, animationData.fps, animationData.frameSize,
                     elementRef, animationData.imageData, imageSize);
@@ -66,4 +73,3 @@
     }
 
 }
-  
