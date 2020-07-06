@@ -4,7 +4,9 @@ I started this project with the intention of learning/exploring what can be done
 
 The repository is divided into numbered subfolders, each one with a single example. 
 
-Every example is also published on GitHub Pages via GitHub Actions using the approach outlined [here](https://www.davideguida.com/how-to-deploy-blazor-webassembly-on-github-pages-using-github-actions/) .
+Every example is also published on GitHub Pages via GitHub Actions using the approach outlined [here](https://www.davideguida.com/how-to-deploy-blazor-webassembly-on-github-pages-using-github-actions/) . 
+
+The `master` branch is used to host the published pages. The main branch is `development`.
 
 - [Example1](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example1) shows how to initialize the 2d canvas
 - [Example2](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example2) shows how to render a sprite and react to the window resize event
