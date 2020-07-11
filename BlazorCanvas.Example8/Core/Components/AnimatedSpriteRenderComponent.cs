@@ -12,7 +12,6 @@ namespace BlazorCanvas.Example8.Core.Components
         private int _currFrameIndex = 0;
         private int _currFramePosX = 0;
         private float _lastUpdate = 0f;
-        private bool _completed = false;
         private AnimationCollection.Animation _animation;
 
         public AnimatedSpriteRenderComponent(GameObject owner) : base(owner)
@@ -29,23 +28,27 @@ namespace BlazorCanvas.Example8.Core.Components
             if (game.GameTime.TotalTime - _lastUpdate > 1000f / Animation.Fps)
             {
                 if (_currFrameIndex >= Animation.FramesCount)
-                {
-                    _completed = true;
                     _currFrameIndex = 0;
-                }
-                    
+
                 _lastUpdate = game.GameTime.TotalTime;
                 _currFramePosX = _currFrameIndex * Animation.FrameSize.Width;
                 ++_currFrameIndex;
             }
 
-            var dx = -(_transform.Direction.X-1f) * Animation.FrameSize.Width / 2f;
-            await context.SetTransformAsync(_transform.Direction.X, 0, 0, 1, dx, 0);
+            var flip = (_transform.Direction.X < 0f);
 
-            await context.DrawImageAsync(Animation.ImageRef, _currFramePosX, 0,
+            await context.SaveAsync();
+
+            await context.TranslateAsync( (flip ? Animation.FrameSize.Width : 0f), 0);
+            await context.ScaleAsync(_transform.Direction.X, 1f);
+
+            await context.DrawImageAsync(Animation.ImageRef,
+                _currFramePosX, 0,
                 Animation.FrameSize.Width, Animation.FrameSize.Height,
-                _transform.Position.X, _transform.Position.Y,
+                0, 0,
                 Animation.FrameSize.Width, Animation.FrameSize.Height);
+
+            await context.RestoreAsync();
         }
 
         public AnimationCollection.Animation Animation
@@ -55,7 +58,7 @@ namespace BlazorCanvas.Example8.Core.Components
             {
                 if (_animation == value)
                     return;
-                _completed = false;
+
                 _currFrameIndex = 0;
                 _animation = value;
             }
