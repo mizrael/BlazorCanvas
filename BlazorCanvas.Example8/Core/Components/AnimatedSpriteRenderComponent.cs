@@ -12,6 +12,7 @@ namespace BlazorCanvas.Example8.Core.Components
         private int _currFrameIndex = 0;
         private int _currFramePosX = 0;
         private float _lastUpdate = 0f;
+
         private AnimationCollection.Animation _animation;
 
         public AnimatedSpriteRenderComponent(GameObject owner) : base(owner)
@@ -24,7 +25,7 @@ namespace BlazorCanvas.Example8.Core.Components
         {
             if (null == Animation)
                 return;
-            
+
             if (game.GameTime.TotalTime - _lastUpdate > 1000f / Animation.Fps)
             {
                 if (_currFrameIndex >= Animation.FramesCount)
@@ -35,11 +36,11 @@ namespace BlazorCanvas.Example8.Core.Components
                 ++_currFrameIndex;
             }
 
-            var flip = (_transform.Direction.X < 0f);
-
             await context.SaveAsync();
 
-            await context.TranslateAsync( (flip ? Animation.FrameSize.Width : 0f), 0);
+            var flip = (_transform.Direction.X < 0f);
+
+            await context.TranslateAsync(_transform.Position.X + (flip ? Animation.FrameSize.Width : 0f), _transform.Position.Y);
             await context.ScaleAsync(_transform.Direction.X, 1f);
 
             await context.DrawImageAsync(Animation.ImageRef,
@@ -58,7 +59,6 @@ namespace BlazorCanvas.Example8.Core.Components
             {
                 if (_animation == value)
                     return;
-
                 _currFrameIndex = 0;
                 _animation = value;
             }

@@ -11,14 +11,15 @@ namespace BlazorCanvas.Example8
     {
         private readonly Transform _transform;
         private readonly AnimationController _animationController;
+        private const float MaxSpeed = 0.25f;
 
         public CharacterBrain(AnimationCollection animationCollection, GameObject owner) : base(owner)
         {
             _transform = owner.Components.Get<Transform>() ??
                          throw new ComponentNotFoundException<Transform>();
 
-            _animationController = owner.Components.Get<AnimationController>() ?? 
-                                  throw new ComponentNotFoundException<AnimationController>();
+            _animationController = owner.Components.Get<AnimationController>() ??
+                                   throw new ComponentNotFoundException<AnimationController>();
         }
 
         public override async ValueTask Update(GameContext game)
@@ -30,19 +31,23 @@ namespace BlazorCanvas.Example8
 
             var isAttacking = (space.State == ButtonState.States.Down);
             var isJumping = (up.State == ButtonState.States.Down);
+
             var speed = 0f;
 
             if (right.State == ButtonState.States.Down)
             {
                 _transform.Direction = Vector2.UnitX;
-                speed = 1f;
+                speed = MaxSpeed;
             }
 
             if (left.State == ButtonState.States.Down)
             {
                 _transform.Direction = -Vector2.UnitX;
-                speed = 1f;
+                speed = MaxSpeed;
             }
+
+            var acc = _transform.Direction * speed * game.GameTime.ElapsedTime;
+            _transform.Position += acc;
 
             _animationController.SetBool("attacking", isAttacking);
             _animationController.SetBool("jumping", isJumping);
