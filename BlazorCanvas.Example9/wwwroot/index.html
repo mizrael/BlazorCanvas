@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>BlazorCanvas Example 9 - character movement</title>
+    <title>BlazorCanvas Example 9 - Scene Graph</title>
     <base href="/" />
     <link href="css/app.css" rel="stylesheet" />
 </head>
@@ -75,23 +75,7 @@
                 canvas: canvases.length ? canvases[0] : null
             };
 
-            if (window.game.canvas) {
-                window.game.canvas.onmousemove = (e) => {
-                    game.instance.invokeMethodAsync('OnMouseMove', e.clientX, e.clientY);
-                };
-                window.game.canvas.onmousedown = (e) => {
-                    game.instance.invokeMethodAsync('OnMouseDown', e.button);
-                };
-                window.game.canvas.onmouseup = (e) => {
-                    game.instance.invokeMethodAsync('OnMouseUp', e.button);
-                };
-                
-                window.game.canvas.onkeydown = (e) => {
-                    game.instance.invokeMethodAsync('OnKeyDown', e.keyCode);
-                };
-                window.game.canvas.onkeyup = (e) => {
-                    game.instance.invokeMethodAsync('OnKeyUp', e.keyCode);
-                };
+            if (window.game.canvas) {               
                 window.game.canvas.onblur = (e) => {
                     window.game.canvas.focus();
                 };

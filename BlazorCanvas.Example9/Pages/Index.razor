@@ -6,7 +6,7 @@
 
 @inject IJSRuntime JsRuntime;
 
-<Spritesheet @ref="_spritesheet" Source = "assets/warrior.json" OnModelLoaded="@InitGame" />
+<Spritesheet @ref="_planet1Spritesheet" Source="assets/planet1.json" OnModelLoaded="@InitGame" />
 
 <div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
     <BECanvas @ref="_canvas"></BECanvas>
@@ -15,15 +15,15 @@
 @code
 {
     BECanvasComponent _canvas;
-    Spritesheet _spritesheet;
+    Spritesheet _planet1Spritesheet;
 
     GameContext _game;
 
     protected async Task InitGame(AnimationCollection animationCollection)
     {
         await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
-
-        _game = await CharacterGame.Create(_canvas, animationCollection);
+        
+        _game = await SceneGraphGame.Create(_canvas, animationCollection);
 
         // this will make sure that the viewport is correctly initialized
         await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
@@ -44,26 +44,4 @@
         _game.Display.Size = new Size(screenWidth, screenHeight);
     }
 
-    [JSInvokable]
-    public async ValueTask OnMouseMove(int mouseX, int mouseY)
-    {
-        InputSystem.Instance.Coords.X = mouseX;
-        InputSystem.Instance.Coords.Y = mouseY;
-    }
-
-    [JSInvokable]
-    public async ValueTask OnMouseDown(MouseButtons button) =>
-        InputSystem.Instance.SetButtonState(button, ButtonState.States.Down);
-
-    [JSInvokable]
-    public async ValueTask OnMouseUp(MouseButtons button) =>
-        InputSystem.Instance.SetButtonState(button, ButtonState.States.Up);
-
-    [JSInvokable]
-    public async ValueTask OnKeyDown(int keyCode) =>
-        InputSystem.Instance.SetKeyState((Keys)keyCode,ButtonState.States.Down);
-
-    [JSInvokable]
-    public async ValueTask OnKeyUp(int keyCode) =>
-        InputSystem.Instance.SetKeyState((Keys)keyCode,ButtonState.States.Up);
 }

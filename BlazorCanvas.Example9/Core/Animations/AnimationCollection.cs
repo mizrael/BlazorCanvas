@@ -32,19 +32,18 @@ namespace BlazorCanvas.Example9.Core.Animations
 
         public class Animation
         {
-            public Animation(string name, int fps, Size frameSize,
+            public Animation(string name, int fps, Size frameSize, int framesCount,
                 ElementReference imageRef, string imageData, Size imageSize,
                 AnimationCollection set)
             {
                 Name = name;
                 Fps = fps;
                 FrameSize = frameSize;
+                FramesCount = framesCount;
                 ImageRef = imageRef;
                 ImageData = imageData;
                 ImageSize = imageSize;
                 Set = set;
-
-                this.FramesCount = this.ImageSize.Width / this.FrameSize.Width;
                 set.AddAnimation(this);
             }
             public AnimationCollection Set { get; }

@@ -5,20 +5,21 @@ using BlazorCanvas.Example9.Core.Exceptions;
 
 namespace BlazorCanvas.Example9.Core.Components
 {
-    public class AnimatedSpriteRenderComponent : BaseComponent
+    public class AnimatedSpriteRenderComponent : BaseComponent, IRenderable
     {
-        private readonly Transform _transform;
+        private readonly TransformComponent _transform;
 
-        private int _currFrameIndex = 0;
         private int _currFramePosX = 0;
+        private int _currFramePosY = 0;
+        private int _currFrameIndex = 0;
         private float _lastUpdate = 0f;
         
         private AnimationCollection.Animation _animation;
 
         public AnimatedSpriteRenderComponent(GameObject owner) : base(owner)
         {
-            _transform = owner.Components.Get<Transform>() ??
-                         throw new ComponentNotFoundException<Transform>();
+            _transform = owner.Components.Get<TransformComponent>() ??
+                         throw new ComponentNotFoundException<TransformComponent>();
         }
 
         public async ValueTask Render(GameContext game, Canvas2DContext context)
@@ -28,23 +29,32 @@ namespace BlazorCanvas.Example9.Core.Components
             
             if (game.GameTime.TotalTime - _lastUpdate > 1000f / Animation.Fps)
             {
-                if (_currFrameIndex >= Animation.FramesCount)
-                    _currFrameIndex = 0;
-                    
                 _lastUpdate = game.GameTime.TotalTime;
-                _currFramePosX = _currFrameIndex * Animation.FrameSize.Width;
-                ++_currFrameIndex;
+
+                _currFramePosX += Animation.FrameSize.Width;
+                if (_currFramePosX >= Animation.ImageSize.Width)
+                {
+                    _currFramePosX = 0;
+                    _currFramePosY += Animation.FrameSize.Height;
+                }
+
+                if (_currFramePosY >= Animation.ImageSize.Height)
+                    _currFramePosY = 0;
+
+                _currFrameIndex++;
+                if(_currFrameIndex >= Animation.FramesCount)
+                    _currFrameIndex = _currFramePosX = _currFramePosY = 0;
             }
 
             await context.SaveAsync();
 
-            var flip = (_transform.Direction.X < 0f);
+            var flip = (_transform.Transform.Direction.X < 0f);
 
-            await context.TranslateAsync(_transform.Position.X + (flip ? Animation.FrameSize.Width : 0f), _transform.Position.Y);
-            await context.ScaleAsync(_transform.Direction.X, 1f);
+            await context.TranslateAsync(_transform.Transform.Position.X + (flip ? Animation.FrameSize.Width : 0f), _transform.Transform.Position.Y);
+            await context.ScaleAsync(_transform.Transform.Direction.X, 1f);
 
             await context.DrawImageAsync(Animation.ImageRef, 
-                _currFramePosX, 0,
+                _currFramePosX, _currFramePosY,
                 Animation.FrameSize.Width, Animation.FrameSize.Height,
                 0,0, 
                 Animation.FrameSize.Width, Animation.FrameSize.Height);
@@ -59,7 +69,7 @@ namespace BlazorCanvas.Example9.Core.Components
             {
                 if (_animation == value)
                     return;
-                _currFrameIndex = 0;
+                _currFramePosX = _currFramePosY = 0;
                 _animation = value;
             }
         }

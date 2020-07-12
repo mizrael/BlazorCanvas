@@ -34,7 +34,7 @@
 
                 Logger.LogInformation($"loading animation {animationData.name}, frame size: {frameSize}, image size: {imageSize}");
 
-                var animation = new AnimationCollection.Animation(animationData.name, animationData.fps, frameSize, elementRef, animationData.imageData, imageSize, Model);
+                var animation = new AnimationCollection.Animation(animationData.name, animationData.fps, frameSize, animationData.framesCount, elementRef, animationData.imageData, imageSize, Model);
 
                 _animations.Add(animation);
             }
@@ -55,6 +55,7 @@
         {
             public string name { get; set; }
             public int fps { get; set; }
+            public int framesCount { get; set; }
             public FrameSize frameSize { get; set; }
             public ImageMeta imageMeta { get; set; }
             public string imageData { get; set; }
