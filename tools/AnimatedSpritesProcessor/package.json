@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "command-line-args": "^5.1.1",
     "image-size": "^0.8.3"
   }
 }

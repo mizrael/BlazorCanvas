@@ -1,20 +1,30 @@
-const args = process.argv.slice(2);
-if (!args.length) {
-    console.log("please provide a valid path");
-    return;
-}
-
-const fs = require('fs'),
+const commandLineArgs = require('command-line-args'),
+    fs = require('fs'),
     path = require('path'),
     sizeOfImage = require('image-size');
+const { exit } = require('process');
 
-const directoryPath = args[0],
-    fps = 12, //TODO: get from command line argument
+const mainDefinitions = [
+    { name: 'path', defaultOption: true, description: 'path containing the spritesheets to combine' },
+    { name: 'fps', alias: 'f', type: Number },
+    { name: 'width', alias: 'w', type: Number, description: 'frame width' },
+    { name: 'height', alias: 'h', type: Number, description: 'frame height' },
+    { name: 'output', alias: 'o', type: String },
+],
+arguments = commandLineArgs(mainDefinitions, { stopAtFirstUnknown: true });
+
+if(!arguments.path){
+    console.error("invalid path");
+    exit(-1);
+}
+
+const directoryPath = arguments.path,
+    fps = arguments.fps || 12,
     frameSize = {
-        width: 150, //TODO: get from command line argument
-        height: 150 //TODO: get from command line argument
+        width: arguments.width || 150,
+        height: arguments.height || 150
     },
-    name = 'warrior',  //TODO: get from command line argument
+    name = arguments.output,
     outputFullPath = path.join(__dirname, name + '.json'), //TODO: get from command line argument
     validExts = ['.png'];
 
