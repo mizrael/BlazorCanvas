@@ -7,6 +7,7 @@ const { exit } = require('process');
 const mainDefinitions = [
     { name: 'path', defaultOption: true, description: 'path containing the spritesheets to combine' },
     { name: 'fps', alias: 'f', type: Number },
+    { name: 'framesCount', alias: 'c', type: Number },
     { name: 'width', alias: 'w', type: Number, description: 'frame width' },
     { name: 'height', alias: 'h', type: Number, description: 'frame height' },
     { name: 'output', alias: 'o', type: String },
@@ -20,6 +21,7 @@ if(!arguments.path){
 
 const directoryPath = arguments.path,
     fps = arguments.fps || 12,
+    framesCount = arguments.framesCount || null,
     frameSize = {
         width: arguments.width || 150,
         height: arguments.height || 150
@@ -53,13 +55,17 @@ fs.readdir(directoryPath, function (err, files) {
             return;
         }
 
-        const imageMeta = sizeOfImage(imageFullPath);
+        const imageMeta = sizeOfImage(imageFullPath),
+            cols = imageMeta.width / frameSize.width,
+            rows = imageMeta.height / frameSize.height
+            computedFramesCount = cols*rows;
 
         result.animations.push({
             name: path.basename(file, ext),
             imageData: buffer.toString('base64'),            
             imageMeta: imageMeta,
             frameSize: frameSize,
+            framesCount: framesCount || computedFramesCount,
             fps: fps
         });        
     });
