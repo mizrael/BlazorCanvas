@@ -34,6 +34,10 @@ namespace BlazorCanvas.Example9
 
             game._sceneGraph.Root.AddChild(planet);
 
+            var fpsCounter = new GameObject();
+            fpsCounter.Components.Add(new FPSCounterComponent(fpsCounter));
+            game._sceneGraph.Root.AddChild(fpsCounter);
+
             return game;
         }
 
