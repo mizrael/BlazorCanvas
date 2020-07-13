@@ -31,10 +31,11 @@
 
 
     [JSInvokable]
-    public async ValueTask GameLoop(float timeStamp)
+    public async ValueTask GameLoop()
     {
-        if (null == _game) return;
-        await _game.Step(timeStamp);
+        if (null == _game) 
+            return;
+        await _game.Step();
     }
 
     [JSInvokable]

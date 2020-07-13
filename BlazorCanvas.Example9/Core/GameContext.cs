@@ -4,9 +4,17 @@ namespace BlazorCanvas.Example9.Core
 {
     public abstract class GameContext
     {
-        public async ValueTask Step(float timeStamp)
+        private bool _isFirst = true;
+
+        public async ValueTask Step()
         {
-            this.GameTime.TotalTime = timeStamp;
+            if (_isFirst)
+            {
+                this.GameTime.Start();
+                _isFirst = false;
+            }
+
+            this.GameTime.Step();
 
             await Update();
             await Render();
