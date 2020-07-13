@@ -12,7 +12,7 @@ namespace BlazorCanvas.Example9.Core.Components
         private int _currFramePosX = 0;
         private int _currFramePosY = 0;
         private int _currFrameIndex = 0;
-        private float _lastUpdate = 0f;
+        private long _lastUpdate = 0;
         
         private AnimationCollection.Animation _animation;
 
@@ -27,9 +27,9 @@ namespace BlazorCanvas.Example9.Core.Components
             if (null == Animation)
                 return;
             
-            if (game.GameTime.TotalTime - _lastUpdate > 1000f / Animation.Fps)
+            if (game.GameTime.TotalMilliseconds - _lastUpdate > 1000f/Animation.Fps)
             {
-                _lastUpdate = game.GameTime.TotalTime;
+                _lastUpdate = game.GameTime.TotalMilliseconds;
 
                 _currFramePosX += Animation.FrameSize.Width;
                 if (_currFramePosX >= Animation.ImageSize.Width)
