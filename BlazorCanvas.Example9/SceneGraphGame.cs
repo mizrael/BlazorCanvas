@@ -25,11 +25,17 @@ namespace BlazorCanvas.Example9
             var context = await canvas.CreateCanvas2DAsync();
             var game = new SceneGraphGame(context);
 
+            var planetAnim = planet1Animations.GetAnimation("planet1");
+
             var planet = new GameObject();
-            planet.Components.Add(new TransformComponent(planet));
+
+            var planetTransform = new TransformComponent(planet);
+            planetTransform.Transform.Position.X = (canvas.Width - planetAnim.FrameSize.Width)/2;
+            planetTransform.Transform.Position.Y = (canvas.Height - planetAnim.FrameSize.Height) / 2;
+            planet.Components.Add(planetTransform);
             planet.Components.Add(new AnimatedSpriteRenderComponent(planet)
             {
-                Animation = planet1Animations.GetAnimation("planet1")
+                Animation = planetAnim
             });
 
             game._sceneGraph.Root.AddChild(planet);
