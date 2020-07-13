@@ -6,7 +6,7 @@
 
 @inject IJSRuntime JsRuntime;
 
-<Spritesheet @ref="_planet1Spritesheet" Source="assets/planet1.json" OnModelLoaded="@InitGame" />
+<Spritesheet @ref="_planet1Spritesheet" Source="assets/planet1.json" OnModelLoaded="@OnAssetsLoaded" />
 
 <div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
     <BECanvas @ref="_canvas"></BECanvas>
@@ -19,21 +19,23 @@
 
     GameContext _game;
 
-    protected async Task InitGame(AnimationCollection animationCollection)
+    protected async Task OnAssetsLoaded(AnimationCollection animationCollection)
     {
-        await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
-        
+        var canvasMeta = await JsRuntime.InvokeAsync<CanvasMeta>("initCanvas", DotNetObjectReference.Create(this));
+        Console.WriteLine(canvasMeta);
+        _canvas.Height = canvasMeta.Height;
+        _canvas.Width = canvasMeta.Width;
+
         _game = await SceneGraphGame.Create(_canvas, animationCollection);
 
         // this will make sure that the viewport is correctly initialized
         await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
     }
 
-
     [JSInvokable]
     public async ValueTask GameLoop()
     {
-        if (null == _game) 
+        if (null == _game)
             return;
         await _game.Step();
     }
@@ -45,4 +47,9 @@
         _game.Display.Size = new Size(screenWidth, screenHeight);
     }
 
+    public class CanvasMeta
+    {
+        public int Width { get; set; }
+        public int Height { get; set; }
+    }
 }

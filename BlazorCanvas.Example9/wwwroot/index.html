@@ -67,7 +67,7 @@
             onResize();
         };
 
-        window.initGame = (instance) => {
+        window.initCanvas = (instance) => {
             var canvasContainer = document.getElementById('canvasContainer'),
                 canvases = canvasContainer.getElementsByTagName('canvas') || [];
             window.game = {
@@ -83,9 +83,15 @@
                 window.game.canvas.focus();
             }
 
+            onResize();
             window.addEventListener("resize", onResize);
 
             window.requestAnimationFrame(gameLoop);
+
+            return {
+                Width: window.game.canvas.width,
+                Height: window.game.canvas.height
+            };
         };
     </script>
 </body >
