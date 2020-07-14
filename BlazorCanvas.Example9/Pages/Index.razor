@@ -7,6 +7,7 @@
 @inject IJSRuntime JsRuntime;
 
 <Spritesheet @ref="_planet1Spritesheet" Source="assets/planet1.json" OnModelLoaded="@OnAssetsLoaded" />
+<Spritesheet @ref="_planet2Spritesheet" Source="assets/planet2.json" OnModelLoaded="@OnAssetsLoaded" />
 
 <div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
     <BECanvas @ref="_canvas"></BECanvas>
@@ -16,17 +17,26 @@
 {
     BECanvasComponent _canvas;
     Spritesheet _planet1Spritesheet;
-
+    Spritesheet _planet2Spritesheet;
     GameContext _game;
 
+    IDictionary<string, AnimationCollection> _animations = new Dictionary<string, AnimationCollection>();
+
     protected async Task OnAssetsLoaded(AnimationCollection animationCollection)
+    {
+        _animations.Add(animationCollection.Name, animationCollection);
+        if(_animations.Count == 2)
+            await InitGame();
+    }
+
+    private async Task InitGame()
     {
         var canvasMeta = await JsRuntime.InvokeAsync<CanvasMeta>("initCanvas", DotNetObjectReference.Create(this));
         Console.WriteLine(canvasMeta);
         _canvas.Height = canvasMeta.Height;
         _canvas.Width = canvasMeta.Width;
 
-        _game = await SceneGraphGame.Create(_canvas, animationCollection);
+        _game = await SceneGraphGame.Create(_canvas, _animations);
 
         // this will make sure that the viewport is correctly initialized
         await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));

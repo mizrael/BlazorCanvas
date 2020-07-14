@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using Blazor.Extensions;
@@ -20,12 +21,12 @@ namespace BlazorCanvas.Example9
             _sceneGraph = new SceneGraph();
         }
 
-        public static async ValueTask<SceneGraphGame> Create(BECanvasComponent canvas, AnimationCollection planet1Animations)
+        public static async ValueTask<SceneGraphGame> Create(BECanvasComponent canvas, IDictionary<string, AnimationCollection> animations)
         {
             var context = await canvas.CreateCanvas2DAsync();
             var game = new SceneGraphGame(context);
 
-            CreatePlanets(canvas, planet1Animations, game._sceneGraph);
+            CreatePlanets(canvas, animations, game._sceneGraph);
 
             var fpsCounter = new GameObject();
             fpsCounter.Components.Add(new FPSCounterComponent(fpsCounter));
@@ -34,32 +35,29 @@ namespace BlazorCanvas.Example9
             return game;
         }
 
-        private static void CreatePlanets(BECanvasComponent canvas, AnimationCollection planet1Animations,
+        private static void CreatePlanets(BECanvasComponent canvas, 
+            IDictionary<string, AnimationCollection> animations,
             SceneGraph sceneGraph)
         {
-            var planetAnim = planet1Animations.GetAnimation("planet1");
-
             var planet = new GameObject();
             var planetTransform = new TransformComponent(planet);
-            planetTransform.Local.Position.X = (canvas.Width - planetAnim.FrameSize.Width) / 2;
-            planetTransform.Local.Position.Y = (canvas.Height - planetAnim.FrameSize.Height) / 2;
+            planetTransform.Local.Position.X = canvas.Width / 2;
+            planetTransform.Local.Position.Y = canvas.Height / 2;
             planet.Components.Add(planetTransform);
             planet.Components.Add(new AnimatedSpriteRenderComponent(planet)
             {
-                Animation = planetAnim
+                Animation = animations["planet1"].GetAnimation("planet1")
             });
             sceneGraph.Root.AddChild(planet);
 
             var satellite = new GameObject();
             var satelliteTransform = new TransformComponent(satellite);
-            satelliteTransform.Local.Position.X = 100;
-            satelliteTransform.Local.Position.Y = 100;
-            satelliteTransform.Local.Scale = new Vector2(0.5f);
+            satelliteTransform.Local.Scale = new Vector2(0.65f);
             satellite.Components.Add(satelliteTransform);
-            satellite.Components.Add(new OrbitComponent(satellite));
+            satellite.Components.Add(new OrbitComponent(satellite, new Vector2(200f, 100f)));
             satellite.Components.Add(new AnimatedSpriteRenderComponent(satellite)
             {
-                Animation = planetAnim
+                Animation = animations["planet2"].GetAnimation("planet2")
             });
             planet.AddChild(satellite);
         }

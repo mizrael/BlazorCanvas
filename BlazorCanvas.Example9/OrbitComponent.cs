@@ -10,11 +10,12 @@ namespace BlazorCanvas.Example9
     {
         private readonly TransformComponent _transform;
 
-        private readonly Vector2 _offset = new Vector2(200f, 100f);
+        private readonly Vector2 _offset;
         private readonly float _speed = 0.0025f;
 
-        public OrbitComponent(GameObject owner) : base(owner)
+        public OrbitComponent(GameObject owner, Vector2 offset) : base(owner)
         {
+            _offset = offset;
             _transform = owner.Components.Get<TransformComponent>();
         }
 
