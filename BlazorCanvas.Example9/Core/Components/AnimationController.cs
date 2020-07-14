@@ -19,8 +19,7 @@ namespace BlazorCanvas.Example9.Core.Components
         public AnimationController(GameObject owner) : base(owner)
         {
             _states = new List<AnimationState>();
-            _animationComponent = owner.Components.Get<AnimatedSpriteRenderComponent>() ??
-                                  throw new ComponentNotFoundException<AnimatedSpriteRenderComponent>();
+            _animationComponent = owner.Components.Get<AnimatedSpriteRenderComponent>();
 
             _floatParams = new Dictionary<string, float>();
             _boolParams = new Dictionary<string, bool>();

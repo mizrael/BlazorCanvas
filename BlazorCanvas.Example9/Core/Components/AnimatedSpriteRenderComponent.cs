@@ -18,8 +18,7 @@ namespace BlazorCanvas.Example9.Core.Components
 
         public AnimatedSpriteRenderComponent(GameObject owner) : base(owner)
         {
-            _transform = owner.Components.Get<TransformComponent>() ??
-                         throw new ComponentNotFoundException<TransformComponent>();
+            _transform = owner.Components.Get<TransformComponent>();
         }
 
         public async ValueTask Render(GameContext game, Canvas2DContext context)

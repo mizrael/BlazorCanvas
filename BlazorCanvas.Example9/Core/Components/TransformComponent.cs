@@ -14,9 +14,8 @@ namespace BlazorCanvas.Example9.Core.Components
         public override async ValueTask Update(GameContext game)
         {
             _world.Clone(ref _local);
-
-            var parentTransform = Owner.Parent?.Components.Get<TransformComponent>();
-            if (parentTransform != null)
+            
+            if (null != Owner.Parent && Owner.Parent.Components.TryGet<TransformComponent>(out var parentTransform))
                 _world.Position = _local.Position + parentTransform.World.Position;
         }
 

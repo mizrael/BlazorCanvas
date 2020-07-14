@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BlazorCanvas.Example9.Core.Exceptions;
 
 namespace BlazorCanvas.Example9.Core.Components
 {
@@ -26,7 +27,15 @@ namespace BlazorCanvas.Example9.Core.Components
         public T Get<T>() where T : class, IComponent
         {
             var type = typeof(T);
-            return _items.ContainsKey(type) ? _items[type] as T : default;
+            return _items.ContainsKey(type) ? _items[type] as T : throw new ComponentNotFoundException<T>();
+        }
+
+        public bool TryGet<T>(out T result) where T : class, IComponent
+        {
+            var type = typeof(T);
+            _items.TryGetValue(type, out var tmp);
+            result = tmp as T;
+            return result != null;
         }
 
         public IEnumerator<IComponent> GetEnumerator() => _items.Values.GetEnumerator();
