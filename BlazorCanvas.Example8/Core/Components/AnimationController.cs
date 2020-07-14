@@ -26,6 +26,7 @@ namespace BlazorCanvas.Example8.Core.Components
             _boolParams = new Dictionary<string, bool>();
         }
 
+
         public void AddState(AnimationState state)
         {
             if (!_states.Any())

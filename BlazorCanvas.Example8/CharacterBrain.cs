@@ -11,12 +11,16 @@ namespace BlazorCanvas.Example8
     {
         private readonly Transform _transform;
         private readonly AnimationController _animationController;
+        private readonly AnimatedSpriteRenderComponent _renderComponent;
         private const float MaxSpeed = 0.25f;
 
         public CharacterBrain(AnimationCollection animationCollection, GameObject owner) : base(owner)
         {
             _transform = owner.Components.Get<Transform>() ??
                          throw new ComponentNotFoundException<Transform>();
+
+            _renderComponent = owner.Components.Get<AnimatedSpriteRenderComponent>() ??
+                               throw new ComponentNotFoundException<AnimatedSpriteRenderComponent>();
 
             _animationController = owner.Components.Get<AnimationController>() ??
                                    throw new ComponentNotFoundException<AnimationController>();
@@ -37,12 +41,14 @@ namespace BlazorCanvas.Example8
             if (right.State == ButtonState.States.Down)
             {
                 _transform.Direction = Vector2.UnitX;
+                _renderComponent.MirrorVertically = false;
                 speed = MaxSpeed;
             }
 
             if (left.State == ButtonState.States.Down)
             {
                 _transform.Direction = -Vector2.UnitX;
+                _renderComponent.MirrorVertically = true;
                 speed = MaxSpeed;
             }
 

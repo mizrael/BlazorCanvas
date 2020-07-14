@@ -38,10 +38,9 @@ namespace BlazorCanvas.Example8.Core.Components
 
             await context.SaveAsync();
 
-            var flip = (_transform.Direction.X < 0f);
+            await context.TranslateAsync(_transform.Position.X + (MirrorVertically ? Animation.FrameSize.Width : 0f), _transform.Position.Y);
 
-            await context.TranslateAsync(_transform.Position.X + (flip ? Animation.FrameSize.Width : 0f), _transform.Position.Y);
-            await context.ScaleAsync(_transform.Direction.X, 1f);
+            await context.ScaleAsync(MirrorVertically ? -1f:1f, 1f);
 
             await context.DrawImageAsync(Animation.ImageRef,
                 _currFramePosX, 0,
@@ -63,5 +62,7 @@ namespace BlazorCanvas.Example8.Core.Components
                 _animation = value;
             }
         }
+
+        public bool MirrorVertically { get; set; }
     }
 }
