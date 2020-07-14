@@ -39,22 +39,33 @@ namespace BlazorCanvas.Example9
             IDictionary<string, AnimationCollection> animations,
             SceneGraph sceneGraph)
         {
+            var sun = new GameObject();
+            var sunTransform = new TransformComponent(sun);
+            sunTransform.Local.Position.X = canvas.Width / 2;
+            sunTransform.Local.Position.Y = canvas.Height / 2;
+            sunTransform.Local.Scale = new Vector2(1.5f);
+            sun.Components.Add(sunTransform);
+            sun.Components.Add(new AnimatedSpriteRenderComponent(sun)
+            {
+                Animation = animations["planet2"].GetAnimation("planet2")
+            });
+            sceneGraph.Root.AddChild(sun);
+
             var planet = new GameObject();
             var planetTransform = new TransformComponent(planet);
-            planetTransform.Local.Position.X = canvas.Width / 2;
-            planetTransform.Local.Position.Y = canvas.Height / 2;
             planet.Components.Add(planetTransform);
+            planet.Components.Add(new OrbitComponent(planet, new Vector2(300f, 200f), 0.0015f));
             planet.Components.Add(new AnimatedSpriteRenderComponent(planet)
             {
                 Animation = animations["planet1"].GetAnimation("planet1")
             });
-            sceneGraph.Root.AddChild(planet);
+            sun.AddChild(planet);
 
             var satellite = new GameObject();
             var satelliteTransform = new TransformComponent(satellite);
             satelliteTransform.Local.Scale = new Vector2(0.65f);
             satellite.Components.Add(satelliteTransform);
-            satellite.Components.Add(new OrbitComponent(satellite, new Vector2(200f, 100f)));
+            satellite.Components.Add(new OrbitComponent(satellite, new Vector2(100f, 100f), 0.0035f));
             satellite.Components.Add(new AnimatedSpriteRenderComponent(satellite)
             {
                 Animation = animations["planet2"].GetAnimation("planet2")
