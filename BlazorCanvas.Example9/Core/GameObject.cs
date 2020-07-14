@@ -29,8 +29,8 @@ namespace BlazorCanvas.Example9.Core
 
         public void AddChild(GameObject child)
         {
-            if (!this.Equals(child.Parent) && null != child.Parent)
-                child.Parent._children.Remove(child);
+            if (!this.Equals(child.Parent))
+                child.Parent?._children.Remove(child);
 
             child.Parent = this;
             _children.Add(child);

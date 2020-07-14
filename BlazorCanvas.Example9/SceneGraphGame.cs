@@ -25,26 +25,43 @@ namespace BlazorCanvas.Example9
             var context = await canvas.CreateCanvas2DAsync();
             var game = new SceneGraphGame(context);
 
-            var planetAnim = planet1Animations.GetAnimation("planet1");
-
-            var planet = new GameObject();
-
-            var planetTransform = new TransformComponent(planet);
-            planetTransform.Transform.Position.X = (canvas.Width - planetAnim.FrameSize.Width)/2;
-            planetTransform.Transform.Position.Y = (canvas.Height - planetAnim.FrameSize.Height) / 2;
-            planet.Components.Add(planetTransform);
-            planet.Components.Add(new AnimatedSpriteRenderComponent(planet)
-            {
-                Animation = planetAnim
-            });
-
-            game._sceneGraph.Root.AddChild(planet);
+            CreatePlanets(canvas, planet1Animations, game._sceneGraph);
 
             var fpsCounter = new GameObject();
             fpsCounter.Components.Add(new FPSCounterComponent(fpsCounter));
             game._sceneGraph.Root.AddChild(fpsCounter);
 
             return game;
+        }
+
+        private static void CreatePlanets(BECanvasComponent canvas, AnimationCollection planet1Animations,
+            SceneGraph sceneGraph)
+        {
+            var planetAnim = planet1Animations.GetAnimation("planet1");
+
+            var planet = new GameObject();
+            var planetTransform = new TransformComponent(planet);
+            planetTransform.Local.Position.X = (canvas.Width - planetAnim.FrameSize.Width) / 2;
+            planetTransform.Local.Position.Y = (canvas.Height - planetAnim.FrameSize.Height) / 2;
+            planet.Components.Add(planetTransform);
+            planet.Components.Add(new AnimatedSpriteRenderComponent(planet)
+            {
+                Animation = planetAnim
+            });
+            sceneGraph.Root.AddChild(planet);
+
+            var satellite = new GameObject();
+            var satelliteTransform = new TransformComponent(satellite);
+            satelliteTransform.Local.Position.X = 100;
+            satelliteTransform.Local.Position.Y = 100;
+            satelliteTransform.Local.Scale = new Vector2(0.5f);
+            satellite.Components.Add(satelliteTransform);
+            satellite.Components.Add(new OrbitComponent(satellite));
+            satellite.Components.Add(new AnimatedSpriteRenderComponent(satellite)
+            {
+                Animation = planetAnim
+            });
+            planet.AddChild(satellite);
         }
 
         protected override async ValueTask Update()

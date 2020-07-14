@@ -4,15 +4,23 @@ namespace BlazorCanvas.Example9.Core
 {
     public class Transform
     {
-        public Vector2 Position = Vector2.Zero;
+        public Vector2 Position;
 
-        public Vector2 Scale = Vector2.One;
+        public Vector2 Scale;
 
-        public Vector2 Direction = Vector2.UnitX;
+        public Vector2 Direction;
 
-        public float Rotation = 0f;
+        public float Rotation;
 
-        public static readonly Transform Identity = new Transform()
+        public void Clone(ref Transform source)
+        {
+            this.Position = source.Position;
+            this.Scale = source.Scale;
+            this.Direction = source.Direction;
+            this.Rotation = source.Rotation;
+        }
+
+        public static Transform Identity() => new Transform()
         {
             Position = Vector2.Zero,
             Scale = Vector2.One,

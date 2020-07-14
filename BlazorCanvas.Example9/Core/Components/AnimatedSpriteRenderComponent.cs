@@ -48,10 +48,8 @@ namespace BlazorCanvas.Example9.Core.Components
 
             await context.SaveAsync();
 
-            var flip = (_transform.Transform.Direction.X < 0f);
-
-            await context.TranslateAsync(_transform.Transform.Position.X + (flip ? Animation.FrameSize.Width : 0f), _transform.Transform.Position.Y);
-            await context.ScaleAsync(_transform.Transform.Direction.X, 1f);
+            await context.TranslateAsync(_transform.World.Position.X, _transform.World.Position.Y);
+            await context.ScaleAsync(_transform.World.Scale.X, _transform.World.Scale.Y);
 
             await context.DrawImageAsync(Animation.ImageRef, 
                 _currFramePosX, _currFramePosY,
