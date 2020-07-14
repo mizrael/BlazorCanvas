@@ -48,8 +48,9 @@ namespace BlazorCanvas.Example9.Core.Components
 
             await context.SaveAsync();
 
-            await context.TranslateAsync(_transform.World.Position.X, _transform.World.Position.Y);
-            await context.ScaleAsync(_transform.World.Scale.X, _transform.World.Scale.Y);
+            await context.TranslateAsync(_transform.World.Position.X + (MirrorVertically ? Animation.FrameSize.Width : 0f), _transform.World.Position.Y);
+
+            await context.ScaleAsync(_transform.World.Scale.X * (MirrorVertically ? -1f:1f), _transform.World.Scale.Y);
 
             await context.DrawImageAsync(Animation.ImageRef, 
                 _currFramePosX, _currFramePosY,
@@ -71,5 +72,7 @@ namespace BlazorCanvas.Example9.Core.Components
                 _animation = value;
             }
         }
+
+        public bool MirrorVertically { get; set; }
     }
 }
