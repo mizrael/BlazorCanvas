@@ -33,7 +33,6 @@ namespace BlazorCanvas.Example5
 
             var sprite = new Sprite()
             {
-                Origin = Point.Empty,
                 Size = new Size(_logoWidth, _logoHeight),
                 SpriteSheet = spritesheet
             };

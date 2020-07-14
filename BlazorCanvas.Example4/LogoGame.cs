@@ -29,7 +29,6 @@ namespace BlazorCanvas.Example4
 
             var sprite = new Sprite()
             {
-                Origin = Point.Empty,
                 Size = new Size(200, 200),
                 SpriteSheet = spritesheet
             };
