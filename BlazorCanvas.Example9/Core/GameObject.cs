@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using BlazorCanvas.Example9.Core.Components;
 
 namespace BlazorCanvas.Example9.Core

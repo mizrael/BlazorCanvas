@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Blazor.Extensions.Canvas.Canvas2D;
 using BlazorCanvas.Example9.Core.Animations;
-using BlazorCanvas.Example9.Core.Exceptions;
 
 namespace BlazorCanvas.Example9.Core.Components
 {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorCanvas.Example9.Core.Animations;
-using BlazorCanvas.Example9.Core.Exceptions;
 
 namespace BlazorCanvas.Example9.Core.Components
 {
