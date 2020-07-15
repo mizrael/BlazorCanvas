@@ -32,7 +32,7 @@
     private async Task InitGame()
     {
         var canvasMeta = await JsRuntime.InvokeAsync<CanvasMeta>("initCanvas", DotNetObjectReference.Create(this));
-        Console.WriteLine(canvasMeta);
+        
         _canvas.Height = canvasMeta.Height;
         _canvas.Width = canvasMeta.Width;
 
