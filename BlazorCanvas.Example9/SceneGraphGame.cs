@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -52,8 +51,7 @@ namespace BlazorCanvas.Example9
             sceneGraph.Root.AddChild(sun);
 
             var planet = new GameObject();
-            var planetTransform = new TransformComponent(planet);
-            planet.Components.Add(planetTransform);
+            planet.Components.Add(new TransformComponent(planet));
             planet.Components.Add(new OrbitComponent(planet, new Vector2(300f, 200f), 0.0015f));
             planet.Components.Add(new AnimatedSpriteRenderComponent(planet)
             {
@@ -71,6 +69,15 @@ namespace BlazorCanvas.Example9
                 Animation = animations["planet2"].GetAnimation("planet2")
             });
             planet.AddChild(satellite);
+
+            var planet2 = new GameObject();
+            planet2.Components.Add(new TransformComponent(planet2));
+            planet2.Components.Add(new OrbitComponent(planet2, new Vector2(600f, 200f), 0.0020f));
+            planet2.Components.Add(new AnimatedSpriteRenderComponent(planet2)
+            {
+                Animation = animations["planet1"].GetAnimation("planet1")
+            });
+            sun.AddChild(planet2);
         }
 
         protected override async ValueTask Update()
