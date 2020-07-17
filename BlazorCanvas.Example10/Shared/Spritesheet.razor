@@ -1,0 +1,78 @@
+﻿@using System.Drawing
+@using BlazorCanvas.Example10.Core.Content
+@using Microsoft.Extensions.Logging
+@inject HttpClient Http
+@inject ILogger<Spritesheet> Logger
+
+@foreach (var animation in _animations)
+{
+    <img hidden src="data:image/png;base64,@animation.ImageData" @ref="animation.ImageRef" data-name="@animation.Name" />
+}
+
+@code{
+
+    [Parameter]
+    public string Source { get; set; }
+
+    private AnimationCollection _model;
+
+    private readonly IList<AnimationCollection.Animation> _animations = new List<AnimationCollection.Animation>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var data = await Http.GetFromJsonAsync<AnimationsFile>(this.Source);
+
+        if (data?.Animations != null)
+        {
+            _model = new AnimationCollection(data.name);
+
+            foreach (var animationData in data.Animations)
+            {
+                var imageSize = new Size(animationData.imageMeta.width, animationData.imageMeta.height);
+                var frameSize = animationData.frameSize.ToSize();
+                var elementRef = new ElementReference(Guid.NewGuid().ToString());
+
+                Logger.LogInformation($"loading animation {animationData.name}, frame size: {frameSize}, image size: {imageSize}");
+
+                var animation = new AnimationCollection.Animation(animationData.name, animationData.fps, frameSize, animationData.framesCount, elementRef, animationData.imageData, imageSize, _model);
+
+                _animations.Add(animation);
+            }
+
+            await this.OnModelLoaded.InvokeAsync(this._model);
+        }
+    }
+
+    [Parameter]
+    public EventCallback<AnimationCollection> OnModelLoaded { get; set; }
+
+    internal class AnimationsFile
+    {
+        public string name { get; set; }
+        public AnimationData[] Animations { get; set; }
+
+        internal class AnimationData
+        {
+            public string name { get; set; }
+            public int fps { get; set; }
+            public int framesCount { get; set; }
+            public FrameSize frameSize { get; set; }
+            public ImageMeta imageMeta { get; set; }
+            public string imageData { get; set; }
+
+            internal class ImageMeta
+            {
+                public int width { get; set; }
+                public int height { get; set; }
+                public string type { get; set; }
+            }
+
+            internal class FrameSize
+            {
+                public int width { get; set; }
+                public int height { get; set; }
+                public Size ToSize() => new Size(width, height);
+            }
+        }
+    }
+}
