@@ -6,7 +6,7 @@ namespace BlazorCanvas.Example5.Core
 {
     public class InputSystem
     {
-        private IDictionary<MouseButtons, ButtonStates> _buttonStates;
+        private readonly IDictionary<MouseButtons, ButtonStates> _buttonStates;
 
         private InputSystem()
         {
@@ -18,7 +18,7 @@ namespace BlazorCanvas.Example5.Core
             };
         }
 
-        public Point Coords;
+        public Point MouseCoords;
 
         private static readonly Lazy<InputSystem> _instance = new Lazy<InputSystem>(new InputSystem());
         public static InputSystem Instance => _instance.Value;

@@ -24,7 +24,7 @@ namespace BlazorCanvas.Example5
         {
             UpdatePosition(game);
 
-            var isOver = _transform.BoundingBox.Contains(InputSystem.Instance.Coords);
+            var isOver = _transform.BoundingBox.Contains(InputSystem.Instance.MouseCoords);
 
             _renderComponent.DrawBoundingBox = isOver;
 
