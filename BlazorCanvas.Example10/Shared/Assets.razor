@@ -20,9 +20,15 @@
     public IAssetsService AssetsService { get; set; }
 
     private readonly List<Tuple<IAsset, AssetData>> _items = new List<Tuple<IAsset, AssetData>>();
+   
     private readonly Dictionary<Type, Func<IAsset, AssetData, RenderFragment>> _renderers = new Dictionary<Type, Func<IAsset, AssetData, RenderFragment>>()
     {
         { typeof(Sprite), (a, d) => @<img @ref="@((a as Sprite).Source)" src="@(d.path)" hidden /> }
+    };
+
+    private readonly Dictionary<string, Func<AssetData, IAssetsService, IAsset>> _loaders = new Dictionary<string, Func<AssetData, IAssetsService, IAsset>>()
+    {
+        { "sprite", (a, s) => s.Load<Sprite>(a.path) }
     };
 
     protected override async Task OnInitializedAsync()
@@ -31,15 +37,13 @@
 
         foreach(var item in items)
         {
-            IAsset asset = null;
-            switch (item.type)
+            if (!_loaders.ContainsKey(item.type))
             {
-                case "sprite":
-                    asset = this.AssetsService.Load<Sprite>(item.path);
-                    break;
-                default:
-                    throw new ArgumentException($"invalid asset type: {item.type}");
+                this.Logger.LogWarning($"invalid asset type: {item.type}");
+                continue;
             }
+            
+            IAsset asset = _loaders[item.type](item, this.AssetsService);
 
             if(null != asset)
                 _items.Add(new Tuple<IAsset, AssetData>(asset, item));
