@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Blazor.Extensions.Canvas.Canvas2D;
-using BlazorCanvas.Example10.Core.Content;
+using BlazorCanvas.Example10.Core.Assets;
 
 namespace BlazorCanvas.Example10.Core.Components
 {

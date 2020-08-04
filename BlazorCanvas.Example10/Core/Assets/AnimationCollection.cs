@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using Microsoft.AspNetCore.Components;
 
-namespace BlazorCanvas.Example10.Core.Content
+namespace BlazorCanvas.Example10.Core.Assets
 {
-    public class AnimationCollection
+    
+    public class AnimationCollection : IAsset
     {
         private readonly IDictionary<string, Animation> _animations;
 

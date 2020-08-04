@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BlazorCanvas.Example10.Core.Content;
+using BlazorCanvas.Example10.Core.Assets;
 
 namespace BlazorCanvas.Example10.Core.Components
 {

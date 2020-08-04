@@ -1,0 +1,59 @@
+﻿@using System.Drawing
+@using System.Runtime.CompilerServices
+@using BlazorCanvas.Example10.Core.Assets
+@using Microsoft.Extensions.Logging
+@inject HttpClient Http
+@inject ILogger<Assets> Logger
+
+<div class="assets">
+    @foreach (var item in _items)
+    {
+        @_renderers[item.Item1.GetType()](item.Item1, item.Item2)
+    }
+</div>
+
+@code{
+    [Parameter]
+    public string Source { get; set; }
+
+    [Parameter]
+    public IAssetsService AssetsService { get; set; }
+
+    private readonly List<Tuple<IAsset, AssetData>> _items = new List<Tuple<IAsset, AssetData>>();
+    private readonly Dictionary<Type, Func<IAsset, AssetData, RenderFragment>> _renderers = new Dictionary<Type, Func<IAsset, AssetData, RenderFragment>>()
+    {
+        { typeof(Sprite), (a, d) => @<img @ref="@((a as Sprite).Source)" src="@(d.path)" hidden /> }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await Http.GetFromJsonAsync<AssetData[]>(this.Source);
+
+        foreach(var item in items)
+        {
+            IAsset asset = null;
+            switch (item.type)
+            {
+                case "sprite":
+                    asset = this.AssetsService.Load<Sprite>(item.path);
+                    break;
+                default:
+                    throw new ArgumentException($"invalid asset type: {item.type}");
+            }
+
+            if(null != asset)
+                _items.Add(new Tuple<IAsset, AssetData>(asset, item));
+        }
+
+        await this.OnLoaded.InvokeAsync(this);
+    }
+
+    [Parameter]
+    public EventCallback OnLoaded { get; set; }
+
+    internal class AssetData
+    {
+        public string path { get; set; }
+        public string type { get; set; }
+    }
+}
