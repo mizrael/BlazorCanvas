@@ -23,7 +23,7 @@ namespace BlazorCanvas.Example7.Core
 
         }
 
-        public Point Coords;
+        public Point MouseCoords;
 
         private static readonly Lazy<InputSystem> _instance = new Lazy<InputSystem>(new InputSystem());
         public static InputSystem Instance => _instance.Value;

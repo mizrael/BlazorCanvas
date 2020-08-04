@@ -48,8 +48,8 @@
     [JSInvokable]
     public async ValueTask OnMouseMove(int mouseX, int mouseY)
     {
-        InputSystem.Instance.Coords.X = mouseX;
-        InputSystem.Instance.Coords.Y = mouseY;
+        InputSystem.Instance.MouseCoords.X = mouseX;
+        InputSystem.Instance.MouseCoords.Y = mouseY;
     }
 
     [JSInvokable]
