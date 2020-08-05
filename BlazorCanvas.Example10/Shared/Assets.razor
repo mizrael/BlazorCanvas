@@ -1,9 +1,8 @@
-﻿@using System.Drawing
-@using System.Runtime.CompilerServices
-@using BlazorCanvas.Example10.Core.Assets
+﻿@using BlazorCanvas.Example10.Core.Assets
 @using Microsoft.Extensions.Logging
 @inject HttpClient Http
 @inject ILogger<Assets> Logger
+@inject IAssetsService AssetsService
 
 <div class="assets">
     @foreach (var item in _items)
@@ -17,43 +16,37 @@
     public string Source { get; set; }
 
     [Parameter]
-    public IAssetsService AssetsService { get; set; }
+    public EventCallback OnLoaded { get; set; }
 
     private readonly List<Tuple<IAsset, AssetData>> _items = new List<Tuple<IAsset, AssetData>>();
-   
-    private readonly Dictionary<Type, Func<IAsset, AssetData, RenderFragment>> _renderers = new Dictionary<Type, Func<IAsset, AssetData, RenderFragment>>()
-    {
-        { typeof(Sprite), (a, d) => @<img @ref="@((a as Sprite).Source)" src="@(d.path)" hidden /> }
-    };
 
-    private readonly Dictionary<string, Func<AssetData, IAssetsService, IAsset>> _loaders = new Dictionary<string, Func<AssetData, IAssetsService, IAsset>>()
-    {
-        { "sprite", (a, s) => s.Load<Sprite>(a.path) }
+    private readonly Dictionary<Type, Func<IAsset, AssetData, RenderFragment>> _renderers = new Dictionary<Type, Func<IAsset, AssetData, RenderFragment>>()
+{
+        { typeof(Sprite), (a, d) => {
+            var sprite = a as Sprite;
+            var base64 = Convert.ToBase64String(sprite.Data);
+            var src = $"data:image/{sprite.Format};base64,{base64}";
+            return @<img @ref="sprite.Source" src="@src" hidden />;
+            }
+        }
     };
 
     protected override async Task OnInitializedAsync()
     {
         var items = await Http.GetFromJsonAsync<AssetData[]>(this.Source);
 
-        foreach(var item in items)
+        foreach (var item in items)
         {
-            if (!_loaders.ContainsKey(item.type))
-            {
-                this.Logger.LogWarning($"invalid asset type: {item.type}");
-                continue;
-            }
-            
-            IAsset asset = _loaders[item.type](item, this.AssetsService);
+            IAsset asset = null;
+            if (item.type == "sprite")
+                asset = await this.AssetsService.Load<Sprite>(item.path);
 
-            if(null != asset)
+            if (null != asset)
                 _items.Add(new Tuple<IAsset, AssetData>(asset, item));
         }
 
         await this.OnLoaded.InvokeAsync(this);
     }
-
-    [Parameter]
-    public EventCallback OnLoaded { get; set; }
 
     internal class AssetData
     {

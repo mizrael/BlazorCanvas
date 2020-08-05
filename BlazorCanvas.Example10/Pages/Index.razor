@@ -4,9 +4,10 @@
 @using BlazorCanvas.Example10.Core
 @using BlazorCanvas.Example10.Core.Assets
 
-@inject IJSRuntime JsRuntime;
+@inject IJSRuntime JsRuntime
+@inject IAssetsService AssetsService
 
-<Assets Source="assets/assets.json" OnLoaded="@OnAssetsLoaded" AssetsService="@AssetsService.Instance" />
+<Assets Source="assets/assets.json" OnLoaded="@OnAssetsLoaded" />
 
 <div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
     <BECanvas @ref="_canvas"></BECanvas>
@@ -29,7 +30,7 @@
         _canvas.Height = canvasMeta.Height;
         _canvas.Width = canvasMeta.Width;
 
-        _game = await AssetsGame.Create(_canvas);
+        _game = await AssetsGame.Create(_canvas, AssetsService);
 
         // this will make sure that the viewport is correctly initialized
         await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));

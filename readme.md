@@ -17,6 +17,7 @@ The `master` branch is used to host the published pages. The main branch is `dev
 - [Example7](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example7) shows how to control animations using the keyboard
 - [Example8](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example8) shows how to use a FSM to control animations and move the character on the screen
 - [Example9](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example9) refactors the code and introduces the Scene Graph
+- [Example10](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example10) adds the Assets Resolver
 
 The goal is to create small examples, built one on top of the other, showing how easy it is to render 2d elements using Blazor. Eventually I might end up writing a full game, it highly depends on how much time I'll have.
 
