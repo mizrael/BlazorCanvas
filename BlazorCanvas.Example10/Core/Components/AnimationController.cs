@@ -15,7 +15,7 @@ namespace BlazorCanvas.Example10.Core.Components
         private readonly IDictionary<string, float> _floatParams;
         private readonly IDictionary<string, bool> _boolParams;
 
-        public AnimationController(GameObject owner) : base(owner)
+        private AnimationController(GameObject owner) : base(owner)
         {
             _states = new List<AnimationState>();
             _animationComponent = owner.Components.Get<AnimatedSpriteRenderComponent>();
