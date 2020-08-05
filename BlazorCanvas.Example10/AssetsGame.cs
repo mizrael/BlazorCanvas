@@ -30,7 +30,7 @@ namespace BlazorCanvas.Example10
             game._sceneGraph.Root.AddChild(fpsCounter);
 
             var player = new GameObject();
-            var playerSprite = assetsService.Get<Sprite>("/assets/playerShip2_green.png");
+            var playerSprite = assetsService.Get<Sprite>("assets/playerShip2_green.png");
             var playerTransform = new TransformComponent(player);
             playerTransform.Local.Position.X = canvas.Width / 2 - playerSprite.Size.Width;
             playerTransform.Local.Position.Y = canvas.Height - playerSprite.Size.Height * 2;
@@ -38,7 +38,7 @@ namespace BlazorCanvas.Example10
             game._sceneGraph.Root.AddChild(player);
 
             var enemy = new GameObject();
-            var enemySprite = assetsService.Get<Sprite>("/assets/enemyRed1.png");
+            var enemySprite = assetsService.Get<Sprite>("assets/enemyRed1.png");
             var enemyTransform = new TransformComponent(enemy);
             enemyTransform.Local.Position.X = canvas.Width / 2 - enemySprite.Size.Width;
             enemyTransform.Local.Position.Y = enemySprite.Size.Height * 2;
