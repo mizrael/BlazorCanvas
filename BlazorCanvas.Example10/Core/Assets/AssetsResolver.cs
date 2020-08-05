@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BlazorCanvas.Example10.Core.Assets
 {
-    public class AssetsResolver : IAssetsService
+    public class AssetsResolver : IAssetsResolver
     {
         private readonly ConcurrentDictionary<string, IAsset> _assets;
         private readonly IAssetLoaderFactory _assetLoaderFactory;

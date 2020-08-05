@@ -2,7 +2,7 @@
 @using Microsoft.Extensions.Logging
 @inject HttpClient Http
 @inject ILogger<Assets> Logger
-@inject IAssetsService AssetsService
+@inject IAssetsResolver AssetsResolver
 
 <div class="assets">
     @foreach (var item in _items)
@@ -39,7 +39,7 @@
         {
             IAsset asset = null;
             if (item.type == "sprite")
-                asset = await this.AssetsService.Load<Sprite>(item.path);
+                asset = await this.AssetsResolver.Load<Sprite>(item.path);
 
             if (null != asset)
                 _items.Add(new Tuple<IAsset, AssetData>(asset, item));

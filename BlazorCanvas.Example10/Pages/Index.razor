@@ -5,7 +5,7 @@
 @using BlazorCanvas.Example10.Core.Assets
 
 @inject IJSRuntime JsRuntime
-@inject IAssetsService AssetsService
+@inject IAssetsResolver AssetsResolver
 
 <Assets Source="assets/assets.json" OnLoaded="@OnAssetsLoaded" />
 
@@ -30,7 +30,7 @@
         _canvas.Height = canvasMeta.Height;
         _canvas.Width = canvasMeta.Width;
 
-        _game = await AssetsGame.Create(_canvas, AssetsService);
+        _game = await AssetsGame.Create(_canvas, AssetsResolver);
 
         // this will make sure that the viewport is correctly initialized
         await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));

@@ -16,7 +16,7 @@ namespace BlazorCanvas.Example10
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddSingleton<IAssetsService, AssetsResolver>();
+            builder.Services.AddSingleton<IAssetsResolver, AssetsResolver>();
             builder.Services.AddSingleton<IAssetLoader<Sprite>, SpriteAssetLoader>();
             builder.Services.AddSingleton<IAssetLoaderFactory>(ctx =>
             {

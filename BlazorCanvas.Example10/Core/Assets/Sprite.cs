@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Text;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorCanvas.Example10.Core.Assets
