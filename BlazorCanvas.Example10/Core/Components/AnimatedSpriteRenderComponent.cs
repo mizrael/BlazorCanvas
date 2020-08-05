@@ -15,7 +15,7 @@ namespace BlazorCanvas.Example10.Core.Components
         
         private AnimationCollection.Animation _animation;
 
-        public AnimatedSpriteRenderComponent(GameObject owner) : base(owner)
+        private AnimatedSpriteRenderComponent(GameObject owner) : base(owner)
         {
             _transform = owner.Components.Get<TransformComponent>();
         }

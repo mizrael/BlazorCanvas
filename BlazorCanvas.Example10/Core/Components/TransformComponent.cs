@@ -5,9 +5,9 @@ namespace BlazorCanvas.Example10.Core.Components
     public class TransformComponent : BaseComponent
     {
         private Transform _local = Transform.Identity();
-        private Transform _world = Transform.Identity();
+        private readonly Transform _world = Transform.Identity();
 
-        public TransformComponent(GameObject owner) : base(owner)
+        private TransformComponent(GameObject owner) : base(owner)
         {
         }
 

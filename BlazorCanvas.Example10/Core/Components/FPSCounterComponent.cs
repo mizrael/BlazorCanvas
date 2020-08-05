@@ -5,7 +5,7 @@ namespace BlazorCanvas.Example10.Core.Components
 {
     public class FPSCounterComponent : BaseComponent, IRenderable
     {
-        public FPSCounterComponent(GameObject owner) : base(owner)
+        private FPSCounterComponent(GameObject owner) : base(owner)
         {
         }
 

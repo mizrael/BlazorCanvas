@@ -1,27 +1,58 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using BlazorCanvas.Example10.Core.Exceptions;
 
 namespace BlazorCanvas.Example10.Core.Components
 {
+    internal class ComponentsFactory
+    {
+        private ComponentsFactory() { }
+
+        private static readonly Lazy<ComponentsFactory> _instance = new Lazy<ComponentsFactory>(new ComponentsFactory());
+        public static ComponentsFactory Instance => _instance.Value;
+
+        public TC Create<TC>(GameObject owner) where TC : class, IComponent
+        {
+            var type = typeof(TC);
+            var ctor = type.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new []{typeof(GameObject)}, null);
+            return ctor.Invoke(new[] {owner}) as TC;
+        }  
+    }
+
+
     public class ComponentsCollection : IEnumerable<IComponent>
     {
+        private readonly GameObject _owner;
         private readonly IDictionary<Type, IComponent> _items;
 
-        public ComponentsCollection()
+        public ComponentsCollection(GameObject owner)
         {
+            _owner = owner;
             _items = new Dictionary<Type, IComponent>();
         }
 
-        public bool Add(IComponent component)
-        {
-            var type = component.GetType();
-            if (_items.ContainsKey(type))
-                return false;
+        //public bool Add(IComponent component)
+        //{
+        //    var type = component.GetType();
+        //    if (_items.ContainsKey(type))
+        //        return false;
 
-            _items.Add(type, component);
-            return true;
+        //    _items.Add(type, component);
+        //    return true;
+        //}
+
+        public TC Add<TC>() where TC : class, IComponent
+        {
+            var type = typeof(TC);
+            if (!_items.ContainsKey(type))
+            {
+                var component = ComponentsFactory.Instance.Create<TC>(_owner);
+                _items.Add(type, component);
+            }
+            
+            return _items[type] as TC;
         }
 
         public T Get<T>() where T : class, IComponent

@@ -9,10 +9,8 @@ namespace BlazorCanvas.Example10.Core.Components
     {
         private readonly TransformComponent _transform;
 
-        public SpriteRenderComponent(Sprite sprite, GameObject owner) : base(owner)
+        private SpriteRenderComponent(GameObject owner) : base(owner)
         {
-            Sprite = sprite ?? throw new ArgumentNullException(nameof(sprite));
-
             _transform = owner.Components.Get<TransformComponent>() ??
                          throw new AccessViolationException("Transform component is required");
         }
@@ -23,6 +21,6 @@ namespace BlazorCanvas.Example10.Core.Components
                 Sprite.Size.Width, Sprite.Size.Height);
         }
 
-        public Sprite Sprite { get; }
+        public Sprite Sprite { get; set; }
     }
 }

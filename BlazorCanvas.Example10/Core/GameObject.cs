@@ -16,7 +16,7 @@ namespace BlazorCanvas.Example10.Core
 
             _children = new List<GameObject>();
 
-            this.Components = new ComponentsCollection();
+            this.Components = new ComponentsCollection(this);
         }
 
         public int Id { get; }

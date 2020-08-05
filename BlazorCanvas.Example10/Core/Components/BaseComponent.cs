@@ -8,7 +8,6 @@ namespace BlazorCanvas.Example10.Core.Components
         protected BaseComponent(GameObject owner)
         {
             this.Owner = owner ?? throw new ArgumentNullException(nameof(owner));
-            this.Owner.Components?.Add(this);
         }
 
         public virtual async ValueTask Update(GameContext game)

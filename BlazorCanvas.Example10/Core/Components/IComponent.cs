@@ -6,6 +6,6 @@ namespace BlazorCanvas.Example10.Core.Components
     {
         ValueTask Update(GameContext game);
 
-        public GameObject Owner { get; }
+        GameObject Owner { get; }
     }
 }
