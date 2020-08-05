@@ -12,10 +12,9 @@ namespace BlazorCanvas.Example10.Core.Assets
             Name = name;
             Source = source;
             Size = size;
+            Origin = new Point(size.Width / 2, size.Height / 2);
             Data = data;
             Format = format;
-
-            
         }
 
         public string Name { get; }
