@@ -1,44 +1,36 @@
 using System;
 using System.Collections.Concurrent;
-using System.Drawing;
-using System.IO;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+using BlazorCanvas.Example10.Core.Assets.Loaders;
+using Microsoft.Extensions.Logging;
 
 namespace BlazorCanvas.Example10.Core.Assets
 {
     public class AssetsResolver : IAssetsService
     {
         private readonly ConcurrentDictionary<string, IAsset> _assets;
-        private readonly HttpClient _httpClient;
+        private readonly IAssetLoaderFactory _assetLoaderFactory;
+        private readonly ILogger<AssetsResolver> _logger;
 
-        public AssetsResolver(HttpClient httpClient)
+        public AssetsResolver(IAssetLoaderFactory assetLoaderFactory, ILogger<AssetsResolver> logger)
         {
-            _httpClient = httpClient;
+            _assetLoaderFactory = assetLoaderFactory;
+            _logger = logger;
             _assets = new ConcurrentDictionary<string, IAsset>();
         }
 
         public async ValueTask<TA> Load<TA>(string path) where TA : IAsset
         {
-            IAsset asset = null;
+            _logger.LogInformation($"loading asset from path: {path}");
 
-            if (typeof(TA) == typeof(Sprite))
-            {
-                var bytes = await _httpClient.GetByteArrayAsync(path);
-                await using var stream = new MemoryStream(bytes);
-                using var image = await SixLabors.ImageSharp.Image.LoadAsync(stream);
-                var size = new Size(image.Width, image.Height);
-                
-                var elementRef = new ElementReference(Guid.NewGuid().ToString());
-                asset = new Sprite(path, elementRef, size, bytes, ImageFormatUtils.FromPath(path));
-            }
+            var loader = _assetLoaderFactory.Get<TA>();
+            var asset = await loader.Load(path);
 
             if (null == asset)
-                throw new TypeLoadException($"invalid asset type: {typeof(TA)}"); 
+                throw new TypeLoadException($"unable to load asset type '{typeof(TA)}' from path '{path}'"); 
             
             _assets.AddOrUpdate(path, k => asset, (k, v) => asset);
-            return (TA) asset;
+            return asset;
         }
 
         public TA Get<TA>(string name) where TA : class, IAsset => _assets[name] as TA;
