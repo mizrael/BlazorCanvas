@@ -68,6 +68,8 @@ namespace BlazorCanvas.Example10
             var spriteRenderer = asteroid.Components.Add<SpriteRenderComponent>();
             spriteRenderer.Sprite = sprite;
 
+            asteroid.Components.Add<AsteroidBrainComponent>();
+
             game._sceneGraph.Root.AddChild(asteroid);
         }
 
