@@ -35,7 +35,7 @@ namespace BlazorCanvas.Example10.Core.Assets
         {
             public Animation(string name, int fps, Size frameSize, int framesCount,
                 ElementReference imageRef, string imageData, Size imageSize,
-                AnimationCollection set)
+                AnimationCollection animations)
             {
                 Name = name;
                 Fps = fps;
@@ -44,10 +44,9 @@ namespace BlazorCanvas.Example10.Core.Assets
                 ImageRef = imageRef;
                 ImageData = imageData;
                 ImageSize = imageSize;
-                Set = set;
-                set.AddAnimation(this);
+             
+                animations.AddAnimation(this);
             }
-            public AnimationCollection Set { get; }
             public string Name { get; }
             public int Fps { get; }
             public int FramesCount { get; }
