@@ -10,7 +10,7 @@ namespace BlazorCanvas.Example7
     {
         private readonly Transform _transform;
         private readonly AnimatedSpriteRenderComponent _animationComponent;
-        private readonly AnimationsSet animationsSet;
+        private readonly AnimationsSet _animationsSet;
 
         public CharacterBrain(AnimationsSet animationsSet, GameObject owner) : base(owner)
         {
@@ -19,7 +19,7 @@ namespace BlazorCanvas.Example7
 
             _animationComponent = owner.Components.Get<AnimatedSpriteRenderComponent>() ?? 
                                   throw new ComponentNotFoundException<AnimatedSpriteRenderComponent>();
-            this.animationsSet = animationsSet;
+            _animationsSet = animationsSet;
         }
 
         public override async ValueTask Update(GameContext game)
@@ -30,17 +30,17 @@ namespace BlazorCanvas.Example7
             if (right.State == ButtonState.States.Down)
             {
                 _transform.Direction = Vector2.UnitX;
-                _animationComponent.Animation = animationsSet.GetAnimation("Run");
+                _animationComponent.Animation = _animationsSet.GetAnimation("Run");
             }
             else if (left.State == ButtonState.States.Down)
             {
                 _transform.Direction = -Vector2.UnitX;
-                _animationComponent.Animation = animationsSet.GetAnimation("Run");
+                _animationComponent.Animation = _animationsSet.GetAnimation("Run");
             }
             else if (right.State == ButtonState.States.Up)
-                _animationComponent.Animation = animationsSet.GetAnimation("Idle");
+                _animationComponent.Animation = _animationsSet.GetAnimation("Idle");
             else if (left.State == ButtonState.States.Up)
-                _animationComponent.Animation = animationsSet.GetAnimation("Idle");
+                _animationComponent.Animation = _animationsSet.GetAnimation("Idle");
         }
     }
 }
