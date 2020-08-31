@@ -17,10 +17,8 @@ namespace BlazorCanvas.Example8.Core.Components
             _transitions = new List<Transition>();
         }
 
-        public void AddTransition(AnimationState to, IEnumerable<Func<AnimationController, bool>> conditions)
-        {
+        public void AddTransition(AnimationState to, IEnumerable<Func<AnimationController, bool>> conditions) =>
             _transitions.Add(new Transition(to, conditions));
-        }
 
         public async ValueTask Update(AnimationController controller)
         {
@@ -29,10 +27,8 @@ namespace BlazorCanvas.Example8.Core.Components
                 controller.SetCurrentState(transition.To);
         }
 
-        public void Enter(AnimatedSpriteRenderComponent animationComponent)
-        {
+        public void Enter(AnimatedSpriteRenderComponent animationComponent) =>
             animationComponent.Animation = _animation;
-        }
 
         private class Transition
         {
