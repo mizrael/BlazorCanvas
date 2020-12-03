@@ -4,6 +4,6 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>BlazorCanvas.Example4</ActiveDebugProfile>
+    <ActiveDebugProfile>BlazorCanvas.Example6</ActiveDebugProfile>
   </PropertyGroup>
 </Project>
