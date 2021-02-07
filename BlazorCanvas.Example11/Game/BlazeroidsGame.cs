@@ -29,10 +29,6 @@ namespace BlazorCanvas.Example11.Game
             
             var sceneGraph = new SceneGraph(this);
             this.AddService(sceneGraph);
-            
-            //var fpsCounter = new GameObject();
-            //fpsCounter.Components.Add<FPSCounterComponent>();
-            //game._sceneGraph.Root.AddChild(fpsCounter);
 
             var player = BuildPlayer();
             sceneGraph.Root.AddChild(player);
@@ -55,8 +51,8 @@ namespace BlazorCanvas.Example11.Game
 
             var playerTransform = player.Components.Add<TransformComponent>();
 
-            playerTransform.Local.Position.X = _canvas.Width / 2 - sprite.Bounds.Width;
-            playerTransform.Local.Position.Y = _canvas.Height / 2 - sprite.Bounds.Height;
+            playerTransform.Local.Position.X = _canvas.Width / 2;
+            playerTransform.Local.Position.Y = _canvas.Height / 2;
 
             var playerSpriteRenderer = player.Components.Add<SpriteRenderComponent>();
             playerSpriteRenderer.Sprite = sprite;
@@ -80,8 +76,13 @@ namespace BlazorCanvas.Example11.Game
             var sprite = spriteSheet.Get("meteorBrown_big1.png");
             
             var transform = asteroid.Components.Add<TransformComponent>();
-            transform.Local.Position.X = rand.Next(sprite.Bounds.Width * 2, (int)_canvas.Width - sprite.Bounds.Width * 2);
-            transform.Local.Position.Y = rand.Next(sprite.Bounds.Height * 2, (int)(_canvas.Height/4)*3);
+
+            var offset = .25f;
+            var tx = ((float)rand.NextDouble() + offset) * 2 - 1;
+            Console.WriteLine($"{tx} {_canvas.Width}");
+            transform.Local.Position.X = tx * (float)_canvas.Width/2.5f + _canvas.Width/2;
+            var ty = ((float)rand.NextDouble() + offset) * 2 - 1;
+            transform.Local.Position.Y = ty * (float)_canvas.Height/2.5f + _canvas.Height/2;
 
             var spriteRenderer = asteroid.Components.Add<SpriteRenderComponent>();
             spriteRenderer.Sprite = sprite;
