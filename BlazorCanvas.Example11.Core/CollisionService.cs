@@ -25,11 +25,11 @@ namespace BlazorCanvas.Example11.Core
         {
             foreach (var collider in _colliders)
             {
-                if (collider.Owner == bbox.Owner || !bbox.Bounds.IntersectsWith(collider.Bounds))
+                if (collider.Owner == bbox.Owner || 
+                   !collider.Owner.Enabled ||
+                   !bbox.Bounds.IntersectsWith(collider.Bounds))
                     continue;
-#if DEBUG
-                Console.WriteLine($"collision detected {bbox.Owner.Id} => {collider.Owner.Id}");
-#endif
+
                 collider.CollideWith(bbox);
                 bbox.CollideWith(collider);
             }
