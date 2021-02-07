@@ -24,3 +24,4 @@ dotnet build -c Release --no-restore
 
 projects=($(ls -1 -- **/*.csproj))
 for i in "${projects[@]}"; do publish "$i" & done
+wait
