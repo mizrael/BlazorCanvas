@@ -6,6 +6,7 @@ using BlazorCanvas.Example11.Core;
 using BlazorCanvas.Example11.Core.Assets;
 using BlazorCanvas.Example11.Core.Components;
 using BlazorCanvas.Example11.Game.Components;
+using BlazorCanvas.Example11.Core.Utils;
 
 namespace BlazorCanvas.Example11.Game
 {
@@ -33,9 +34,8 @@ namespace BlazorCanvas.Example11.Game
             var player = BuildPlayer();
             sceneGraph.Root.AddChild(player);
 
-            var rand = new Random();
             for (var i = 0; i != 6; ++i)
-                AddAsteroid(sceneGraph, rand);
+                AddAsteroid(sceneGraph);
 
             var context = await _canvas.CreateCanvas2DAsync();
             var renderService = new RenderService(this, context);
@@ -68,7 +68,7 @@ namespace BlazorCanvas.Example11.Game
             return player;
         }
 
-        private void AddAsteroid(SceneGraph sceneGraph, Random rand)
+        private void AddAsteroid(SceneGraph sceneGraph)
         {
             var asteroid = new GameObject();
 
@@ -78,10 +78,16 @@ namespace BlazorCanvas.Example11.Game
             var transform = asteroid.Components.Add<TransformComponent>();
 
             var offset = .25f;
-            var tx = ((float)rand.NextDouble() + offset) * 2 - 1;
-            transform.Local.Position.X = tx * (float)_canvas.Width/2.5f + _canvas.Width/2;
-            var ty = ((float)rand.NextDouble() + offset) * 2 - 1;
-            transform.Local.Position.Y = ty * (float)_canvas.Height/2.5f + _canvas.Height/2;
+            
+            var w = (float)_canvas.Width;
+            var rx = MathUtils.Random.NextDouble(offset, 1.0);
+            var tx = (float)MathUtils.Normalize(rx, 0, 1, -1, 1);
+            transform.Local.Position.X = tx * w/2f + w/2f;
+
+            var h = (float)_canvas.Height;
+            var ry = MathUtils.Random.NextDouble(offset, 1.0);
+            var ty = (float)MathUtils.Normalize(ry, 0, 1, -1, 1);
+            transform.Local.Position.Y = ty * h/2f + h/2f;
 
             var spriteRenderer = asteroid.Components.Add<SpriteRenderComponent>();
             spriteRenderer.Sprite = sprite;
