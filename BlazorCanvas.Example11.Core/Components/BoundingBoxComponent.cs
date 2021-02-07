@@ -4,10 +4,7 @@ using Blazor.Extensions.Canvas.Canvas2D;
 
 namespace BlazorCanvas.Example11.Core.Components
 {
-    public class BoundingBoxComponent : BaseComponent
-#if DEBUG
-        , IRenderable
-#endif
+    public class BoundingBoxComponent : BaseComponent, IRenderable
     {
         private readonly TransformComponent _transform; 
         private Rectangle _bounds;
