@@ -6,14 +6,17 @@ cp readme.md build/readme.md
 
 publish(){
     local projectName=$1
+    echo "publishing $projectName ..."
     filename=$(basename -- "$projectName")    
     filename="${filename%.*}"
-    buildPath="build/$filename-t"    
+    buildPath="build/$filename-tmp"    
 	dotnet publish --configuration Release $projectName --output $buildPath --no-build --no-restore
     mv $buildPath/wwwroot/ "build/$filename"        
     rm -rf $buildPath
 
     sed -i -e "s/<base href=\"\/\" \/>/<base href=\"\/BlazorCanvas\/$filename\/\" \/>/g" build/$filename/index.html
+
+    echo "$projectName published!"
 }
 
 dotnet restore
