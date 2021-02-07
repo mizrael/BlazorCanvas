@@ -1,8 +1,9 @@
 name: gh-pages
 
-push:
-    branches:
-      - develop
+on:
+  push:
+      branches:
+        - develop
 
 jobs:
   build:
