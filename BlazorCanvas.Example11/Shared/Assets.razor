@@ -1,0 +1,65 @@
+﻿@using Microsoft.Extensions.Logging
+@using BlazorCanvas.Example11.Core.Assets
+@inject HttpClient Http
+@inject ILogger<Assets> Logger
+@inject IAssetsResolver AssetsResolver
+
+<div class="assets">
+    @foreach (var item in _items)
+    {
+        @_renderers[item.Item1.GetType()](item.Item1, item.Item2)
+    }
+</div>
+
+@code{
+    [Parameter]
+    public string Source { get; set; }
+
+    [Parameter]
+    public EventCallback OnLoaded { get; set; }
+
+    private readonly List<(IAsset asset, AssetData data)> _items = new ();
+
+    private readonly Dictionary<Type, Func<IAsset, AssetData, RenderFragment>> _renderers = new Dictionary<Type, Func<IAsset, AssetData, RenderFragment>>()
+{
+        {
+            typeof(Sprite), (a, d) => {
+                var sprite = a as Sprite;
+                return @<img name="@sprite.ElementRef.Id" @ref="sprite.ElementRef" src="@sprite.ImagePath" hidden />;
+            }
+        },
+        {
+            typeof(SpriteSheet), (a, d) =>
+            {
+                var spriteSheet = a as SpriteSheet;
+                
+                return @<img name="@spriteSheet.ElementRef.Id" @ref="spriteSheet.ElementRef" src="@spriteSheet.ImagePath" hidden />;
+            }
+        }
+    };
+
+        protected override async Task OnInitializedAsync()
+        {
+            var items = await Http.GetFromJsonAsync<AssetData[]>(this.Source);
+
+            foreach (var item in items)
+            {
+                IAsset asset = null;
+                if (item.type == "sprite")
+                    asset = await this.AssetsResolver.Load<Sprite>(item.path);
+                else if (item.type == "spritesheet")
+                    asset = await this.AssetsResolver.Load<SpriteSheet>(item.path);
+
+                if (null != asset)
+                    _items.Add(new (asset, item));
+            }
+
+            await this.OnLoaded.InvokeAsync(this);
+        }
+
+        internal class AssetData
+        {
+            public string path { get; set; }
+            public string type { get; set; }
+        }
+}

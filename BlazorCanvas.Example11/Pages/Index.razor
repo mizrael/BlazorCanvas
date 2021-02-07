@@ -1,0 +1,83 @@
+﻿@page "/"
+@using System.Drawing
+@using Blazor.Extensions
+@using BlazorCanvas.Example11.Core
+@using BlazorCanvas.Example11.Core.Assets
+@using BlazorCanvas.Example11.Game
+
+@inject IJSRuntime JsRuntime
+@inject IAssetsResolver AssetsResolver
+
+<Assets Source="assets/assets.json" OnLoaded="@OnAssetsLoaded" />
+
+<div id="canvasContainer" style="position: fixed; opacity: 1; background-color: black; width: 100%; height: 100%">
+    <BECanvas @ref="_canvas"></BECanvas>
+</div>
+
+@code
+{
+    BECanvasComponent _canvas;
+    GameContext _game;
+    InputService _inputService;
+
+    bool _assetsLoaded = false;
+    bool _initialized = false;
+
+    protected void OnAssetsLoaded()
+    {
+        _assetsLoaded = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_initialized && _assetsLoaded)
+        {
+            await InitGame();
+            _initialized = true;
+        }
+    }
+
+    private async ValueTask InitGame()
+    {
+        var canvasMeta = await JsRuntime.InvokeAsync<CanvasMeta>("initCanvas", DotNetObjectReference.Create(this));
+
+        _canvas.Height = canvasMeta.Height;
+        _canvas.Width = canvasMeta.Width;
+
+        _game = new BlazeroidsGame(_canvas, AssetsResolver);
+
+        // this will make sure that the viewport is correctly initialized
+        await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public async ValueTask GameLoop()
+    {
+        if (null == _game)
+            return;
+        await _game.Step();
+
+        _inputService ??= _game.GetService<InputService>();
+    }
+
+    [JSInvokable]
+    public async ValueTask OnResize(int screenWidth, int screenHeight)
+    {
+        if (null == _game) return;
+        _game.Display.Size = new Size(screenWidth, screenHeight);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnKeyDown(int keyCode) =>
+        _inputService.SetKeyState((Keys)keyCode, ButtonState.States.Down);
+
+    [JSInvokable]
+    public async ValueTask OnKeyUp(int keyCode) =>
+        _inputService.SetKeyState((Keys)keyCode, ButtonState.States.Up);
+
+    public class CanvasMeta
+    {
+        public int Width { get; set; }
+        public int Height { get; set; }
+    }
+}

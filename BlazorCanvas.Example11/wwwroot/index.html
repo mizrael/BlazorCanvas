@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>BlazorCanvas Example 11 - Collision detection</title>
+    <base href="/" />
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+
+<body>
+    <app>Loading...</app>
+
+    <!-- Start Single Page Apps for GitHub Pages -->
+    <script type="text/javascript">
+        // Single Page Apps for GitHub Pages
+        // https://github.com/rafrex/spa-github-pages
+        // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
+        // ----------------------------------------------------------------------
+        // This script checks to see if a redirect is present in the query string
+        // and converts it back into the correct url and adds it to the
+        // browser's history using window.history.replaceState(...),
+        // which won't cause the browser to attempt to load the new url.
+        // When the single page app is loaded further down in this file,
+        // the correct url will be waiting in the browser's history for
+        // the single page app to route accordingly.
+        (function (l) {
+            if (l.search) {
+                var q = {};
+                l.search.slice(1).split('&').forEach(function (v) {
+                    var a = v.split('=');
+                    q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+                });
+                if (q.p !== undefined) {
+                    window.history.replaceState(null, null,
+                        l.pathname.slice(0, -1) + (q.p || '') +
+                        (q.q ? ('?' + q.q) : '') +
+                        l.hash
+                    );
+                }
+            }
+        }(window.location))
+    </script>
+    <!-- End Single Page Apps for GitHub Pages -->
+
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/Blazor.Extensions.Canvas/blazor.extensions.canvas.js"></script>
+
+    <script>
+        function gameLoop(timeStamp) {
+            window.requestAnimationFrame(gameLoop);
+            game.instance.invokeMethodAsync('GameLoop');
+        }
+
+        function onResize() {
+            if (!window.game.canvas)
+                return;
+
+            game.canvas.width = window.innerWidth;
+            game.canvas.height = window.innerHeight;
+
+            game.instance.invokeMethodAsync('OnResize', game.canvas.width, game.canvas.height);
+        }
+
+        window.gameWindowResize = (instance) => {
+            onResize();
+        };
+
+        window.initCanvas = (instance) => {
+            var canvasContainer = document.getElementById('canvasContainer'),
+                canvases = canvasContainer.getElementsByTagName('canvas') || [];
+            window.game = {
+                instance: instance,
+                canvas: canvases.length ? canvases[0] : null
+            };
+
+            if (window.game.canvas) {               
+                window.game.canvas.onkeydown = (e) => {
+                    game.instance.invokeMethodAsync('OnKeyDown', e.keyCode);
+                };
+                window.game.canvas.onkeyup = (e) => {
+                    game.instance.invokeMethodAsync('OnKeyUp', e.keyCode);
+                };
+                window.game.canvas.onblur = (e) => {
+                    window.game.canvas.focus();
+                };
+                window.game.canvas.tabIndex = 0;
+                window.game.canvas.focus();
+            }
+
+            onResize();
+            window.addEventListener("resize", onResize);
+
+            window.requestAnimationFrame(gameLoop);
+
+            return {
+                Width: window.game.canvas.width,
+                Height: window.game.canvas.height
+            };
+        };
+    </script>
+</body >
+
+</html>
