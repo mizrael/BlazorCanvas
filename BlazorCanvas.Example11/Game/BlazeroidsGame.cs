@@ -77,17 +77,15 @@ namespace BlazorCanvas.Example11.Game
             
             var transform = asteroid.Components.Add<TransformComponent>();
 
-            var offset = .25f;
-            
-            var w = (float)_canvas.Width;
-            var rx = MathUtils.Random.NextDouble(offset, 1.0);
-            var tx = (float)MathUtils.Normalize(rx, 0, 1, -1, 1);
-            transform.Local.Position.X = tx * w/2f + w/2f;
+            var w = (double)_canvas.Width;
+            var rx = MathUtils.Random.NextDouble(0, .35, .65, 1);
+            var tx = MathUtils.Normalize(rx, 0, 1, -1, 1);
+            transform.Local.Position.X = (float)(tx * w/2 + w/2);
 
-            var h = (float)_canvas.Height;
-            var ry = MathUtils.Random.NextDouble(offset, 1.0);
-            var ty = (float)MathUtils.Normalize(ry, 0, 1, -1, 1);
-            transform.Local.Position.Y = ty * h/2f + h/2f;
+            var h = (double)_canvas.Height;
+            var ry = MathUtils.Random.NextDouble(0, .35, .65, 1);
+            var ty = MathUtils.Normalize(ry, 0, 1, -1, 1);
+            transform.Local.Position.Y = (float)(ty * h/2 + h/2);
 
             var spriteRenderer = asteroid.Components.Add<SpriteRenderComponent>();
             spriteRenderer.Sprite = sprite;
