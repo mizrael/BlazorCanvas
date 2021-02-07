@@ -12,7 +12,7 @@ publish(){
     buildPath="build/$filename-tmp"    
 	dotnet publish --configuration Release $projectName --output $buildPath --no-build --no-restore
     
-    mv -v $buildPath/wwwroot/* $buildPath/wwwroot/.* ./build  
+    mv -v $buildPath/wwwroot/* $buildPath/wwwroot/.* ./build/$filename  
     rm -rf $buildPath
 
     sed -i -e "s/<base href=\"\/\" \/>/<base href=\"\/BlazorCanvas\/$filename\/\" \/>/g" build/$filename/index.html
