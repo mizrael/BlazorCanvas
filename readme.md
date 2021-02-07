@@ -21,6 +21,7 @@ The `master` branch is used to host the published pages. The main branch is `dev
 - [Example8](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example8) shows how to use a FSM to control animations and move the character on the screen
 - [Example9](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example9) refactors the code and introduces the Scene Graph
 - [Example10](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example10) adds the Assets Resolver
+- [Example11](https://mizrael.github.io/BlazorCanvas/BlazorCanvas.Example11) shows how to do collision detection
 
 ### Tutorials
 
