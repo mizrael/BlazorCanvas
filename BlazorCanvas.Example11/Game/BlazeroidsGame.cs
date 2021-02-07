@@ -79,7 +79,6 @@ namespace BlazorCanvas.Example11.Game
 
             var offset = .25f;
             var tx = ((float)rand.NextDouble() + offset) * 2 - 1;
-            Console.WriteLine($"{tx} {_canvas.Width}");
             transform.Local.Position.X = tx * (float)_canvas.Width/2.5f + _canvas.Width/2;
             var ty = ((float)rand.NextDouble() + offset) * 2 - 1;
             transform.Local.Position.Y = ty * (float)_canvas.Height/2.5f + _canvas.Height/2;
