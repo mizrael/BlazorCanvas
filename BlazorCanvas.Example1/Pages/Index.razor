@@ -13,20 +13,15 @@
     BECanvasComponent _canvasReference = null;
     Canvas2DContext _outputCanvasContext;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
-
-        await base.OnInitializedAsync();
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-            _outputCanvasContext = await _canvasReference.CreateCanvas2DAsync();
-            await _outputCanvasContext.SetTextBaselineAsync(TextBaseline.Top);
-        }
+        if (!firstRender)
+            return;
+
+        _outputCanvasContext = await _canvasReference.CreateCanvas2DAsync();
+        await _outputCanvasContext.SetTextBaselineAsync(TextBaseline.Top);
+
+        await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
     }
 
     [JSInvokable]
