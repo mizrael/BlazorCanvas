@@ -23,7 +23,6 @@ namespace BlazorCanvas.Example5.Core.Components
 
             if (DrawBoundingBox)
             {
-                await context.BeginPathAsync();
                 await context.SetStrokeStyleAsync($"rgb(255,255,0)");
                 await context.SetLineWidthAsync(3);
                 await context.StrokeRectAsync(_transform.BoundingBox.X, _transform.BoundingBox.Y,
