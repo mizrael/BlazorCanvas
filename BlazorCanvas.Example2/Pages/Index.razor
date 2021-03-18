@@ -19,11 +19,11 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-            await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
-            _context = await _canvas.CreateCanvas2DAsync();
-        }
+        if (!firstRender)
+            return;
+        
+        await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+        _context = await _canvas.CreateCanvas2DAsync();        
     }
 
     [JSInvokable]

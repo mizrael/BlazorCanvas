@@ -20,15 +20,15 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-            await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+        if (!firstRender)
+            return;
+        
+        await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
 
-            _game = await LogoGame.Create(_canvas, _spritesheet);
+        _game = await LogoGame.Create(_canvas, _spritesheet);
 
-            // this will make sure that the viewport is correctly initialized
-            await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
-        }
+        // this will make sure that the viewport is correctly initialized
+        await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));        
     }
 
     [JSInvokable]

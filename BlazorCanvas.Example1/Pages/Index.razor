@@ -19,7 +19,6 @@
             return;
 
         _outputCanvasContext = await _canvasReference.CreateCanvas2DAsync();
-        await _outputCanvasContext.SetTextBaselineAsync(TextBaseline.Top);
 
         await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
     }
