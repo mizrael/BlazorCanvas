@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Blazor.Extensions.Canvas" Version="1.1.0-preview1" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.2" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.7" />
   </ItemGroup>
 
 </Project>
